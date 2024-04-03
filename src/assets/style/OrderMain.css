@@ -1,0 +1,192 @@
+body {
+    font-size: 12 / 1.5 tahoma, arial, Hiragino Sans GB, \\5B8B\4F53, sans-serif;
+}
+
+.orders-container {
+    margin: 10px 0;
+}
+
+.bought-wrapper-mod__trade-order___2lrzV.bought-wrapper-mod__closed___3pIh6 {
+    border: 1px solid #ececec;
+}
+
+.bought-table-mod__table___AnaXt {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    color: #3c3c3c;
+    table-layout: fixed;
+}
+
+.bought-wrapper-mod__closed___3pIh6 .bought-wrapper-mod__head___2vnqo {
+    background: #f1f1f1;
+}
+
+.bought-table-mod__col1___3U5RK {
+    width: 38%;
+}
+
+.bought-table-mod__col2___224Oh {
+    width: 10%;
+}
+
+.bought-table-mod__col3___J0oe0 {
+    width: 5%;
+}
+
+.bought-table-mod__col4___XvKTC,
+.bought-table-mod__col5___2kktP {
+    width: 12%;
+}
+
+.bought-table-mod__col4___XvKTC,
+.bought-table-mod__col5___2kktP {
+    width: 12%;
+}
+
+.bought-table-mod__col6___1KqCQ {
+    width: 11%;
+}
+
+.bought-table-mod__col7___PpB_p {
+    width: 12%;
+}
+
+tr {
+    display: table-row;
+    vertical-align: inherit;
+    border-color: inherit;
+}
+
+.bought-wrapper-mod__table___3xFFM td {
+    border-width: 1px 1px 0 0;
+    border-style: solid;
+    border-color: #daf3ff;
+    text-align: center;
+}
+
+.bought-table-mod__table___AnaXt td {
+    vertical-align: top;
+}
+
+.bought-table-mod__table___AnaXt td,
+.bought-table-mod__table___AnaXt th {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.bought-wrapper-mod__checkbox-label___3Va60 {
+    margin-left: 20px;
+}
+
+.bought-wrapper-mod__create-time___yNWVS {
+    margin-right: 10px;
+    font-weight: 700;
+}
+
+.bought-wrapper-mod__closed___3pIh6 .bought-wrapper-mod__table___3xFFM td {
+    border-color: #ececec;
+}
+
+.bought-wrapper-mod__table___3xFFM .bought-wrapper-mod__head___2vnqo td {
+    border: none;
+}
+
+.seller-mod__icon___2F6_V {
+    display: inline-block;
+    width: 16px;
+    vertical-align: middle;
+    margin-right: 3px;
+}
+
+tbody {
+    display: table-row-group;
+    vertical-align: middle;
+    border-color: inherit;
+}
+
+.suborder-mod__production___3WebF {
+    margin-left: 20px;
+}
+
+.ml-mod__media___2sZrj {
+    float: left;
+}
+
+.bought-table-mod__table___AnaXt a {
+    color: #3c3c3c;
+    text-decoration: none;
+    word-break: break-all;
+}
+
+img {
+    overflow-clip-margin: content-box;
+    overflow: clip;
+}
+
+.seller-mod__name___2IlQm {
+    display: inline-block;
+    width: 70px;
+    line-height: 16px;
+    vertical-align: middle;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    text-align: left;
+}
+
+.production-mod__pic___G8alD {
+    display: block;
+    overflow: hidden;
+}
+
+.production-mod__pic___G8alD img {
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+}
+
+img {
+    border-style: none;
+}
+
+fieldset,
+img {
+    border: 0;
+}
+
+.production-mod__production___123Ax {
+    text-align: left;
+}
+
+
+.bought-table-mod__table___AnaXt p {
+    margin-top: 8px;
+    margin-bottom: 8px;
+    line-height: 1;
+}
+
+.production-mod__sku-item___395gE {
+    color: #9e9e9e;
+    margin-right: 8px;
+    line-height: 16px;
+}
+
+.price-mod__price___3_8Zs {
+    font-family: verdana;
+    font-style: normal;
+}
+
+.price-mod__del___3kcDc {
+    color: #9c9c9c;
+}
+
+.pay-img {
+    width: 16px;
+    height: auto;
+}
+
+.bought-wrapper-mod__table___3xFFM .bought-wrapper-mod__thead-operations-container___2LwDA {
+    padding-right: 20px;
+    text-align: right;
+}
