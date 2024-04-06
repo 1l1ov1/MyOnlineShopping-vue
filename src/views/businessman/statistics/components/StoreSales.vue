@@ -1,6 +1,5 @@
 <script setup>
 import { ref, watch } from 'vue'
-
 const props = defineProps({
   storeSalesOption: Object
 })
@@ -39,7 +38,7 @@ watch(
 }
 
 .common-layout {
-    width: 100%;
+  width: 100%;
     display: inline-block;
 }
 </style>

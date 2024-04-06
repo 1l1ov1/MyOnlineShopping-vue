@@ -4,6 +4,7 @@ import { queryGoodsService } from '@/api/goods'
 import { onMounted, ref } from 'vue'
 import NavigationComponent from '@/views/components/NavigationComponent.vue'
 import FooterComponent from '@/views/components/FooterComponent.vue'
+import router from '@/router'
 const route = useRoute()
 const searchGoodsList = ref(null)
 const queryGoods = async () => {

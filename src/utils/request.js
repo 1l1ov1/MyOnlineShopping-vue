@@ -5,7 +5,7 @@ import { ElMessage } from 'element-plus'
 
 const instance = axios.create({
   // 1. 超时时间
-  timeout: 10000
+  timeout: 600000
 })
 instance.defaults.withCredentials = true
 instance.interceptors.request.use(
@@ -34,6 +34,10 @@ instance.interceptors.response.use(
     if (res.data.code === 1) {
       return res.data
     }
+
+    if (res.request.responseType === 'blob') {
+      return res.data
+    }
     // 处理业务失败，给错误提示，抛出错误
     ElMessage.error(res.data.msg || '服务异常')
     return Promise.reject(res.data)
@@ -51,6 +55,7 @@ instance.interceptors.response.use(
       ElMessage.error('权限过期，请重新登录授权')
       return
     }
+    console.log('err', err)
     // 错误的默认情况
     ElMessage.error(err.response.data.msg || err.response.data.error)
 

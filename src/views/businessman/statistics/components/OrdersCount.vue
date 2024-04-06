@@ -1,12 +1,11 @@
 <script setup>
 import { ref, watch } from 'vue'
-
 const props = defineProps({
-  storeSalesOption: Object
+  ordersCountOption: Object
 })
 const op = ref()
 watch(
-  () => props.storeSalesOption,
+  () => props.ordersCountOption,
   (newValue) => {
     op.value = newValue
   },
@@ -21,7 +20,7 @@ watch(
         <el-container>
             <el-header>
                 <div class="container">
-                    <h4 class="homeTitle">总营业额统计</h4>
+                    <h4 class="homeTitle">订单数量</h4>
                     <div class="chart-container">
                         <v-chart :option="op" autoresize></v-chart>
                     </div>

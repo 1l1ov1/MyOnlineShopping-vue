@@ -108,13 +108,16 @@ const FavoriteType = {
   STORE: 'store'
 }
 const isFavorite = ref(false)
+const isAddingOrDeleting = ref(false)
 const addCollection = async () => {
+  isAddingOrDeleting.value = true
   // 如果是收藏状态
   if (isFavorite.value) {
     // 如果有收藏, 就应该删除
     const res = await batchDeleteFavoriteService(props.goods.id, FavoriteType.PRODUCT)
     if (res.code === 1) {
       isFavorite.value = false
+      isAddingOrDeleting.value = false
       ElMessage.success('取消收藏')
     }
   } else {
@@ -124,6 +127,7 @@ const addCollection = async () => {
     const res = await addFavoriteService(obj, FavoriteType.PRODUCT)
     if (res.code === 1) {
       isFavorite.value = true
+      isAddingOrDeleting.value = false
       ElMessage.success('添加成功')
     }
   }
@@ -203,8 +207,14 @@ const findFavorite = async () => {
       </div>
       <div class="Actions-divider"></div>
       <div class="Actions-right">
-        <el-button :icon="Star" class="collectionButton" @click="addCollection" v-if="!isFavorite">收藏</el-button>
-        <el-button :icon="StarFilled" class="collectionButton" @click="addCollection" v-else>收藏</el-button>
+        <el-button :icon="Star" class="collectionButton"
+        @click="addCollection"
+        v-if="!isFavorite"
+        :disabled="isAddingOrDeleting">收藏</el-button>
+        <el-button :icon="StarFilled" class="collectionButton"
+        @click="addCollection"
+        v-else
+        :disabled="isAddingOrDeleting">收藏</el-button>
     </div>
     </div>
 </template>

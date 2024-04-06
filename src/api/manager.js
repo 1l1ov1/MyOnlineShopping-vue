@@ -76,11 +76,3 @@ export const getGoodsListService = (params) => {
     data: params
   })
 }
-
-// 查询营业额
-export const queryStoreSales = (day) =>
-  request.get(`/api/manager/queryStoreSales/${day}`)
-
-// 查询用户数量和在线用户数量
-export const queryUserAndRegisterUser = (day) =>
-  request.get(`/api/manager/queryUserCount/${day}`)
