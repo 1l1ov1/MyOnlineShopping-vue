@@ -44,6 +44,9 @@ const StoreSalesRangeType = {
 const activeName = ref('昨日')
 // 点击标签页
 const handleTabClick = async (tab, event) => {
+  if (tab.props.name === '导出数据' || tab.props.name === '营业额提现') {
+    return
+  }
   const value = StoreSalesRangeType.getValueByLabel(tab.props.label).value
   await queryStoreSalesInOneDay(value)
   queryOrderUserCount(value)
@@ -205,16 +208,16 @@ const updateOrdersCountChartOptions = () => {
     ordersCountOption.value.series[0].data = totalCountList.value
     ordersCountOption.value.series[1].data = successfulOrdersCountList.value
     ordersCountOption.value.title.text = activeName.value + '总订单数量：' +
-              totalCount.value + '  成功订单数量：' +
-              successfulOrdersCount.value + '  订单完成率：' +
-             (ordersCompletionRate.value * 100).toFixed(2) + '%'
+      totalCount.value + '  成功订单数量：' +
+      successfulOrdersCount.value + '  订单完成率：' +
+      (ordersCompletionRate.value * 100).toFixed(2) + '%'
   }
 }
 // 修改销量表
 const updateSalesTop10ChartOptions = () => {
   if (datesInRange.value.length > 0 &&
-  goodsNameList.value.length > 0 &&
-  numberList.value.length > 0) {
+    goodsNameList.value.length > 0 &&
+    numberList.value.length > 0) {
     // salesTop10Option.value.xAxis.data = numberList.value
     salesTop10Option.value.yAxis.data = goodsNameList.value
     salesTop10Option.value.series[0].data = numberList.value
@@ -338,9 +341,9 @@ const orderUserCountOption = ref({
 const ordersCountOption = ref({
   title: {
     text: activeName.value + '总订单数量：' +
-              totalCount.value + '  成功订单数量：' +
-              successfulOrdersCount.value + '  订单完成率：' +
-             (ordersCompletionRate.value * 100).toFixed(2) + '%'
+      totalCount.value + '  成功订单数量：' +
+      successfulOrdersCount.value + '  订单完成率：' +
+      (ordersCompletionRate.value * 100).toFixed(2) + '%'
   },
   tooltip: {
     trigger: 'axis',
@@ -439,7 +442,7 @@ const salesTop10Option = ref({
 })
 // 数据导出
 const handleExport = async () => {
-  ElMessageBox.confirm('是否确认导出最近30天运营数据?', '提示', {
+  ElMessageBox.confirm('是否确认导出最近一个月运营数据?', '提示', {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
     type: 'warning'
@@ -456,9 +459,10 @@ const handleExport = async () => {
     console.log('error： ', error)
   })
 }
+
 // 点击标签页之前
 const beforeLeave = (activeName) => {
-  if (activeName === '导出数据') {
+  if (activeName === '导出数据' || activeName === '营业额提现') {
     return false
   }
 }
@@ -480,7 +484,7 @@ onMounted(async () => {
       </el-tab-pane>
       <el-tab-pane label="近7日" name="近7日">
       </el-tab-pane>
-      <el-tab-pane label="近30日" name="近30日">
+      <el-tab-pane label="近一个月" name="近一个月">
       </el-tab-pane>
       <el-tab-pane label="本周" name="本周">
       </el-tab-pane>
@@ -496,7 +500,7 @@ onMounted(async () => {
     </el-tabs>
 
     <el-row :gutter="30">
-      <el-col :span="12" class="first-col" >
+      <el-col :span="12" class="first-col">
         <StoreSales :storeSalesOption="storeSalesOption" />
       </el-col>
       <el-col :span="12" class="first-col">

@@ -2,7 +2,7 @@ import router from '@/router'
 import { userStore } from '@/store'
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
-
+import { userLogoutService } from '@/api/user'
 const instance = axios.create({
   // 1. 超时时间
   timeout: 600000
@@ -42,7 +42,7 @@ instance.interceptors.response.use(
     ElMessage.error(res.data.msg || '服务异常')
     return Promise.reject(res.data)
   },
-  (err) => {
+  async (err) => {
     // TODO 5. 处理401错误
     // 错误的特殊情况 => 401 权限不足 或 token过期 => 拦截到登录
     const userStoreInstance = userStore()
@@ -53,6 +53,7 @@ instance.interceptors.response.use(
       userStoreInstance.setUser({})
       router.push('/login')
       ElMessage.error('权限过期，请重新登录授权')
+      await userLogoutService()
       return
     }
     console.log('err', err)

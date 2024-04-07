@@ -9,7 +9,6 @@ const route = useRoute()
 const searchGoodsList = ref(null)
 const queryGoods = async () => {
   const res = await queryGoodsService(route.query.search)
-  console.log(res.data)
   searchGoodsList.value = res.data.goodsList
 }
 
@@ -19,7 +18,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <NavigationComponent></NavigationComponent>
+      <NavigationComponent ></NavigationComponent>
     <el-container class="goods-container"  v-if="searchGoodsList !== null">
         <el-header>
             <div class="hot-goods-title"><span class="hgt-title">猜你喜欢</span></div>

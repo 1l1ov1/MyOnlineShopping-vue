@@ -59,37 +59,42 @@ const queryOneTypeOrders = async (target) => {
     pageObj.value.total = res.data.total
   }
 }
+const updateOrdersList = () => {
+  queryOneTypeOrders(translation(activeName.value))
+  userStoreInstance.getUser()
+}
+
 onMounted(() => {
   queryOneTypeOrders(OrdersType.ALL)
 })
 </script>
 
 <template>
-  <NavigationComponent></NavigationComponent>
+    <NavigationComponent ></NavigationComponent>
   <el-tabs v-model="activeName" class="demo-tabs" @tab-change="tabChange" :before-leave="beforeLeave"
     @tab-click="tabClick">
     <el-tab-pane label="全部订单" name="all">
       <OrdersFooter :ordersList="ordersList" :pageObj="pageObj" @pagination="pagination"></OrdersFooter>
       <OrdersHeader></OrdersHeader>
-      <OrdersMain :ordersList="ordersList"></OrdersMain>
+      <OrdersMain :ordersList="ordersList" @updateOrdersList="updateOrdersList"></OrdersMain>
       <OrdersFooter :ordersList="ordersList" :pageObj="pageObj" @pagination="pagination"></OrdersFooter>
     </el-tab-pane>
     <el-tab-pane label="未发货订单" name="unfilled">
       <OrdersFooter :ordersList="ordersList" :pageObj="pageObj" @pagination="pagination"></OrdersFooter>
       <OrdersHeader></OrdersHeader>
-      <OrdersMain :ordersList="ordersList"></OrdersMain>
+  <OrdersMain :ordersList="ordersList" @updateOrdersList="updateOrdersList"></OrdersMain>
       <OrdersFooter :ordersList="ordersList" :pageObj="pageObj" @pagination="pagination"></OrdersFooter>
     </el-tab-pane>
     <el-tab-pane label="已发货订单" name="filled">
       <OrdersFooter :ordersList="ordersList" :pageObj="pageObj" @pagination="pagination"></OrdersFooter>
       <OrdersHeader></OrdersHeader>
-      <OrdersMain :ordersList="ordersList"></OrdersMain>
+  <OrdersMain :ordersList="ordersList" @updateOrdersList="updateOrdersList"></OrdersMain>
       <OrdersFooter :ordersList="ordersList" :pageObj="pageObj" @pagination="pagination"></OrdersFooter>
     </el-tab-pane>
     <el-tab-pane label="退款订单" name="refund">
       <OrdersFooter :ordersList="ordersList" :pageObj="pageObj" @pagination="pagination"></OrdersFooter>
       <OrdersHeader></OrdersHeader>
-      <OrdersMain :ordersList="ordersList"></OrdersMain>
+  <OrdersMain :ordersList="ordersList" @updateOrdersList="updateOrdersList"></OrdersMain>
       <OrdersFooter :ordersList="ordersList" :pageObj="pageObj" @pagination="pagination"></OrdersFooter>
     </el-tab-pane>
   </el-tabs>

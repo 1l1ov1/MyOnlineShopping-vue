@@ -18,7 +18,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <NavigationComponent></NavigationComponent>
+      <NavigationComponent ></NavigationComponent>
     <el-container class="goods-container" v-if="store !== null">
         <el-header>
             <div class="hot-goods-title"><span class="hgt-title">店铺：{{ store.storeName }}</span></div>

@@ -34,7 +34,7 @@ onMounted(() => {
 <template>
     <div class="common-layout">
         <div class="nav">
-            <NavigationComponent></NavigationComponent>
+              <NavigationComponent ></NavigationComponent>
         </div>
         <el-container>
             <el-header>

@@ -120,7 +120,7 @@ onMounted(() => {
             <!-- 导航头 -->
             <el-header>
                 <div class="operation">
-                    <NavigationComponent></NavigationComponent>
+                      <NavigationComponent ></NavigationComponent>
                 </div>
             </el-header>
             <!-- 分割线 -->

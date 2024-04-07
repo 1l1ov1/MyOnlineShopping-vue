@@ -18,7 +18,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <NavigationComponent></NavigationComponent>
+      <NavigationComponent ></NavigationComponent>
     <el-container class="goods-container" v-if="goodsList">
         <el-header>
             <div class="hot-goods-title"><span class="hgt-title">猜你喜欢</span></div>

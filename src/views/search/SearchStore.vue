@@ -9,9 +9,7 @@ const route = useRoute()
 const searchStoreList = ref(null)
 const queryStores = async () => {
   const res = await queryStoresService(route.query.search)
-  console.log(res.data.storeList)
   searchStoreList.value = res.data.storeList
-  console.log(searchStoreList.value)
 }
 
 onMounted(() => {
@@ -20,7 +18,7 @@ onMounted(() => {
 </script>
 
 <template>
-     <NavigationComponent></NavigationComponent>
+       <NavigationComponent ></NavigationComponent>
     <el-container class="goods-container"  v-if="searchStoreList !== null && Array.isArray(searchStoreList) && searchStoreList.length !== 0">
         <el-header>
             <div class="hot-goods-title"><span class="hgt-title">猜你喜欢</span></div>

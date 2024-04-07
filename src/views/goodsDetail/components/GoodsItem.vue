@@ -93,6 +93,7 @@ const buy = async () => {
   const res = await buyGoodsService(params.value)
   if (res.code === 1) {
     ElMessage.success('购买成功')
+    userStoreInstance.getUser()
   }
 }
 // 加入购物车

@@ -472,7 +472,7 @@ const salesTop10Option = ref({
 })
 // 数据导出
 const handleExport = async () => {
-  ElMessageBox.confirm('是否确认导出最近30天运营数据?', '提示', {
+  ElMessageBox.confirm('是否确认导出最近一个月运营数据?', '提示', {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
     type: 'warning'
@@ -519,7 +519,7 @@ onMounted(async () => {
 
         </div>
       </el-tab-pane>
-      <el-tab-pane label="近30日" name="近30日">
+      <el-tab-pane label="近一个月" name="近一个月">
         <div class="chart-container">
 
         </div>

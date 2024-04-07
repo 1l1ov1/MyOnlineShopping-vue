@@ -155,6 +155,10 @@ const routes = [
         component: () => import('../views/businessman/statistics/StatisticsIndex.vue')
       },
       {
+        path: '/businessBack/withdrawRecord',
+        component: () => import('../views/businessman/withdrawRecord/WithdrawRecord.vue')
+      },
+      {
         path: '/businessBack/goods',
         component: () => import('../views/businessman/goods/ManageGoods.vue')
       },

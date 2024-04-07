@@ -73,5 +73,5 @@ export const userQueryOrdersService = (userId, target, currentPage, pageSize) =>
 }
 
 // 用户申请退款
-export const userApplyRefundService = (id) =>
-  request.get(`/api/uer/applyRefund/${id}`)
+export const applyRefundService = (id) =>
+  request.get(`/api/user/applyRefund/${id}`)

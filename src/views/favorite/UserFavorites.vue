@@ -128,7 +128,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <NavigationComponent></NavigationComponent>
+      <NavigationComponent ></NavigationComponent>
     <el-container class="goods-container" v-if="favoriteList">
         <el-header>
             <div class="hot-goods-title"><span class="hgt-title">您收藏的 {{ isGoodsFavorite ?

@@ -12,11 +12,11 @@ onMounted(() => {
 })
 
 const props = defineProps({
-  update: Boolean
+  refreshNavigation: Boolean
 })
 const emit = defineEmits(['updateUserInfo'])
 watch(
-  () => props.update,
+  () => props.refreshNavigation,
   (newValue) => {
     if (newValue) {
       userStoreInstance.getUser()

@@ -45,7 +45,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <NavigationComponent></NavigationComponent>
+      <NavigationComponent ></NavigationComponent>
     <div class="goods-page">
         <div class="search-header-root">
             <div class="search-header-content">

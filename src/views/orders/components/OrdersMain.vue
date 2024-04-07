@@ -2,7 +2,7 @@
 import { watch, ref } from 'vue'
 import router from '@/router'
 import { ElMessageBox, ElMessage } from 'element-plus'
-import {} from '@/api/user'
+import { applyRefundService } from '@/api/user'
 // import { Delete } from '@element-plus/icons-vue'
 const props = defineProps({
   ordersList: Array
@@ -34,19 +34,24 @@ const applyRefund = (id) => {
       type: 'warning'
     }
   )
-    .then(() => {
-      ElMessage({
-        type: 'success',
-        message: 'Delete completed'
-      })
+    .then(async () => {
+      const res = await applyRefundService(id)
+      if (res.code === 1) {
+        emit('updateOrdersList')
+        ElMessage({
+          type: 'success',
+          message: '申请退款成功'
+        })
+      }
     })
     .catch(() => {
       ElMessage({
-        type: 'info',
-        message: 'Delete canceled'
+        type: 'error',
+        message: '申请退款失败'
       })
     })
 }
+const emit = defineEmits(['updateOrdersList'])
 </script>
 
 <template>
@@ -189,8 +194,9 @@ const applyRefund = (id) => {
                     class="text-mod__link___1rXmw text-mod__hover___1TDrR"  action="b4"
                     id="applyInvoice">申请开票</a>
                 </p>
-                <!-- 如果是待发货订单，就允许申请退款或接收到商品的7天内 -->
-                <p style="margin-bottom:3px;" v-if="item.status === 1">
+                <!-- 如果是待发货订单，就允许申请退款或已签收订单7天内允许申请退款 -->
+                <p style="margin-bottom:3px;" v-if="item.status === 1 || (item.status === 4
+                && Date.now() - item.createTime < 7 * 24 * 60 * 60 * 1000)">
                   <a href="javascript:void(0)" @click="applyRefund(item.id)"
                     class="text-mod__link___1rXmw text-mod__hover___1TDrR"  action="b4"
                     id="applyRefund">申请退款</a>

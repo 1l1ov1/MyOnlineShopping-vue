@@ -427,6 +427,7 @@ const buy = async () => {
     // 通知footer全选取消
     emit('checkAll', false)
     emit('totalPrice', selectedGoodsTotalPrice.value)
+    userStoreInstance.getUser()
   }
 }
 // 勾选数量

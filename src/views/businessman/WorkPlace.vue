@@ -78,6 +78,12 @@ const open = ref(false)
                     </el-icon>
                     <span>数据统计</span>
                 </el-menu-item>
+                <el-menu-item index="/businessBack/withdrawRecord" id="business-withdraw-item">
+                    <el-icon>
+                        <PieChart />
+                    </el-icon>
+                    <span>提现记录</span>
+                </el-menu-item>
                 <el-menu-item index="/businessBack/goods" id="business-goods-item">
                     <el-icon>
                         <Box />
