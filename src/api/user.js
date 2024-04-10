@@ -33,9 +33,12 @@ export const userGetDetailService = (id, isDefault) =>
     }
   })
 // 重置密码
-export const userUpdatePassService = ({ oldPwd, newPwd, rePwd }) =>
-  request.patch('/api/user/updatePwd', { oldPwd, newPwd, rePwd })
+export const userUpdatePassService = (params) =>
+  request.patch('/api/user/updatePwd', params)
 
+// 忘记密码
+export const userForgetPassService = (params) =>
+  request.patch('/api/user/forgetPwd', params)
 // 用户开店
 export const userCreateStoreService = (obj) =>
   request.post('/api/user/createStore', obj)
@@ -75,3 +78,16 @@ export const userQueryOrdersService = (userId, target, currentPage, pageSize) =>
 // 用户申请退款
 export const applyRefundService = (id) =>
   request.get(`/api/user/applyRefund/${id}`)
+
+// 添加地址
+export const userAddAddress = (params) =>
+  request.post('/api/user/addAddress', params)
+
+// 删除非默认地址
+export const deleteAddress = (id) => {
+  return request({
+    url: '/api/user/deleteAddress',
+    method: 'delete',
+    params: { id }
+  })
+}

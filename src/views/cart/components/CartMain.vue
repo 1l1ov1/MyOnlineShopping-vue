@@ -404,6 +404,12 @@ const handleChange = (storeIndex, goodsIndex, currentValue) => {
 }
 // 购买
 const buy = async () => {
+  const userAddressEmpty = !userStoreInstance.user?.addressList ||
+              userStoreInstance.user.addressList.length === 0
+  if (userAddressEmpty) {
+    ElMessage.error('请先去个人中心添加收货地址')
+    return
+  }
   const res = await submitUserCartService(params.value)
   if (res.code === 1) {
     ElMessage.success(res.msg)

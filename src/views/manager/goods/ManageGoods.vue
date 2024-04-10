@@ -7,6 +7,7 @@ import GoodsAddOrEdit from '../../components/GoodsAddOrEdit'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { userStore } from '@/store'
 import { getCategoryListService } from '@/api/category'
+import { goodsConstant } from '@/constant/constants'
 const userStoreInstance = userStore()
 // 商品列表
 const goodsList = ref([])
@@ -166,7 +167,7 @@ const onDeleteGoods = (row) => {
 const updateRef = ref()
 const changeGoodsStatus = (row) => {
   updateRef.value = row
-  const msg = row.status === 0 ? '上架' : '下架'
+  const msg = goodsConstant.getReversGoodsStatusLabel(row.status)
   ElMessageBox.confirm(
     '确认是否修改编号' + row.id + '：' + row.goodsName + '的账号状态为' + msg,
     '警告',
@@ -221,14 +222,13 @@ onMounted(() => {
       </el-form-item>
       <el-form-item label="分类搜索" v-if="categoryList">
         <el-select style="width: 100px" v-model="params.categoryId" placeholder="请选择" clearable>
-          <el-option v-for="item in categoryList" :key="item.id"
-          :label="item.categoryName" :value="item.id"/>
+          <el-option v-for="item in categoryList" :key="item.id" :label="item.categoryName" :value="item.id" />
         </el-select>
       </el-form-item>
       <el-form-item label="商品状态">
         <el-select style="width: 100px" v-model="params.status" placeholder="请选择" clearable>
-          <el-option label="上架" value="1" />
-          <el-option label="下架" value="0" />
+          <el-option label="上架" :value="goodsConstant.goodsStatus.SHELVES.value" />
+          <el-option label="下架" :value="goodsConstant.goodsStatus.TAKE_OFF_THE_SHELVES.value" />
         </el-select>
       </el-form-item>
       <el-form-item label="店名搜索">
@@ -241,54 +241,49 @@ onMounted(() => {
     </el-form>
     <!-- 表格区域 -->
     <el-table v-if="goodsList.length !== 0" :data="goodsList" style="width: 100%" v-loading="loading"
-      @selection-change="handleSelectionChange" :cell-style="tableRowStyle"
-      @sort-change="sortTable"
-      :sort-orders="['ascending', 'descending']"
-    >
+      @selection-change="handleSelectionChange" :cell-style="tableRowStyle" @sort-change="sortTable"
+      :sort-orders="['ascending', 'descending']">
       <el-table-column type="selection" width="40" />
-      <el-table-column label="序号" prop="serialNumber" sortable="custom"
-        width="100" align="center">
+      <el-table-column label="序号" prop="serialNumber" sortable="custom" width="100" align="center">
       </el-table-column>
       <!-- <el-table-column prop="avatar" label="头像" width="180" v-if="false" /> -->
       <el-table-column prop="goodsName" label="商品名" width="150" align="center" />
       <el-table-column prop="categoryName" label="分类" width="65" align="center"></el-table-column>
       <el-table-column prop="price" label="商品原价" width="120" align="center">
-        <template #default="{row}">
-           ￥ {{ row.price.toFixed(2) }}
+        <template #default="{ row }">
+          ￥ {{ row.price.toFixed(2) }}
         </template>
       </el-table-column>
       <el-table-column prop="discount" label="商品折扣" width="80" align="center">
       </el-table-column>
-      <el-table-column  label="商品现价" width="120" align="center">
-        <template #default="{row}">
-           ￥ {{ (row.price * row.discount).toFixed(2) }}
+      <el-table-column label="商品现价" width="120" align="center">
+        <template #default="{ row }">
+          ￥ {{ (row.price * row.discount).toFixed(2) }}
         </template>
       </el-table-column>
       <el-table-column prop="total" label="商品总数" width="110" align="center">
-        <template #default="{row}">
-            {{ row.total }} 件
+        <template #default="{ row }">
+          {{ row.total }} 件
         </template>
       </el-table-column>
       <el-table-column prop="store.storeName" label="店名" width="140" align="center">
       </el-table-column>
       <el-table-column prop="store.coverPic" label="商品图片" width="100" align="center">
-        <template #default="{row}">
-          <el-avatar
-        :src="(row.coverPic !== undefined && row.coverPic !== null && row.coverPic !== '') ?
-          require('@/assets/uploadGoods/' + row.coverPic) : require('@/assets/默认商品图.png')"
-      />
+        <template #default="{ row }">
+          <el-avatar :src="(row.coverPic !== undefined && row.coverPic !== null && row.coverPic !== '') ?
+        require('@/assets/uploadGoods/' + row.coverPic) : require('@/assets/默认商品图.png')" />
         </template>
       </el-table-column>
       <el-table-column prop="createTime" label="商品创建时间" align="center" />
       <el-table-column prop="status" label="当前商品状态" width="105" align="center">
 
         <template #default="{ row }">
-          <el-link :underline="false"  type="primary" @click="changeGoodsStatus(row)">{{
-        row.status === 0 ? '下架'
-          : '上架' }}</el-link>
+          <el-link :underline="false" type="primary" @click="changeGoodsStatus(row)">{{
+        goodsConstant.getGoodsStatusLabel(row.status)
+      }}</el-link>
         </template>
       </el-table-column>
-      <el-table-column label="操作"  align="center">
+      <el-table-column label="操作" align="center">
 
         <template #default="{ row }">
           <el-button :icon="Edit" circle plain type="primary" @click="onEditGoods(row)"></el-button>
@@ -309,5 +304,4 @@ onMounted(() => {
   </pageContainer>
 </template>
 
-<style lang="less" scoped>
-</style>
+<style lang="less" scoped></style>

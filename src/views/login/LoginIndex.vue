@@ -113,13 +113,12 @@ onUnmounted(() => {
               <img :src="imgUrl" @click="resetImg">
             </div>
           </el-form-item>
-          <el-form-item>
             <div class="button-group">
               <el-button type="primary" @click="submitForm()" @keydown.enter="keyDown">登录</el-button>
               <el-button @click="resetForm(ruleFormRef)" type="warning">重置</el-button>
               <el-button @click="() => router.push('/register')" type="primary">没有账号？去注册</el-button>
+              <el-button @click="() => router.push('/forgetPassword')" type="primary">忘记密码？</el-button>
             </div>
-          </el-form-item>
         </el-form>
       </div>
     </div>
@@ -149,6 +148,7 @@ onUnmounted(() => {
 
 .button-group {
   display: inline-block;
+  margin-left: 6%;
 }
 
 .el-input {

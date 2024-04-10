@@ -10,6 +10,8 @@ import {
   codeToText
   // pcaTextArr // 省市区三级联动数据，纯汉字
 } from 'element-china-area-data'
+import NavigationComponent from '../components/NavigationComponent.vue'
+import FooterComponent from '../components/FooterComponent.vue'
 import AddAddress from '@/views/components/AddAddress.vue'
 const userStoreInstance = userStore()
 // 得到仓库中的user
@@ -151,7 +153,7 @@ const onDialog = () => {
 }
 
 const updateData = async () => {
-  // 重新刷新
+// 重新刷新
   await userStoreInstance.getUser()
   nextTick(() => {
     // 更新数据
@@ -164,6 +166,7 @@ onMounted(() => {
 </script>
 
 <template>
+  <NavigationComponent></NavigationComponent>
   <page-container title="基本资料">
     <el-row>
       <el-col :span="12">
@@ -177,7 +180,7 @@ onMounted(() => {
               :on-success="handleAvatarSuccess" :headers="{ Authorization: userStoreInstance.token }">
               <img
                 :src="(formModel.avatar === undefined || formModel.avatar === '' || formModel.avatar === null) ?
-        ((imgUrl === '' ? require('../../../assets/avatar.jpg') : imgUrl)) : require('../../../assets/uploadAvatar/' + formModel.avatar)"
+        ((imgUrl === '' ? require('@/assets/avatar.jpg') : imgUrl)) : require('@/assets/uploadAvatar/' + formModel.avatar)"
                 class="avatar" />
               <el-icon class="el-icon--upload"><upload-filled /></el-icon>
               <div class="el-upload__text">
@@ -229,10 +232,10 @@ onMounted(() => {
                 </template>
               </el-table-column>
               <el-table-column prop="address" label="设为默认地址">
-                <template #default="{ row }">
+                <template #default="{row}">
                   <div v-if="row.isDefault === 0">
-                    <el-button :icon="Edit" circle plain type="primary" @click="onEditAddress(row)"></el-button>
-                    <el-button :icon="Delete" circle plain type="danger" @click="onDeleteAddress(row)"></el-button>
+                     <el-button :icon="Edit" circle plain type="primary" @click="onEditAddress(row)"></el-button>
+                     <el-button :icon="Delete" circle plain type="danger" @click="onDeleteAddress(row)"></el-button>
                   </div>
                 </template>
               </el-table-column>
@@ -247,7 +250,7 @@ onMounted(() => {
     </el-row>
     <AddAddress ref="openDialog" @dialog="onDialog"></AddAddress>
   </page-container>
-
+  <FooterComponent></FooterComponent>
 </template>
 
 <style scoped lang="less">

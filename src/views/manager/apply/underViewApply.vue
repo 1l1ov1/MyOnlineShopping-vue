@@ -5,6 +5,7 @@ import pageContainer from '@/components/PageContainer.vue'
 import { getApplyListService, batchDeleteApplyService, updateApply } from '@/api/apply'
 import { ref, onMounted } from 'vue'
 import ApplyEditDialog from './components/ApplyEdit'
+import { applyConstant } from '@/constant/constants'
 const params = ref({
   page: 1, // 当前页
   pageSize: 10, // 当前生效页的每页条数
@@ -202,92 +203,94 @@ onMounted(() => {
 </script>
 
 <template>
-    <pageContainer title="所有申请"  @click="handleClickOutside">
-        <template #extra>
-            <!-- <el-button @click="onAddUser" type="primary" ref="dialog">添加用户</el-button> -->
-            <el-button @click="batchDeleteApply()" type="primary">批量删除</el-button>
-        </template>
-        <!-- 行内表单 -->
-        <el-form inline>
-            <el-form-item label="用户搜索">
-                <el-input v-model="params.username" placeholder="用户账号" />
-            </el-form-item>
-            <el-form-item label="商店搜索">
-                <el-input v-model="params.storeName" placeholder="商店名称" />
-            </el-form-item>
-            <el-form-item>
-                <el-button @click="onSearch" type="primary">搜索</el-button>
-                <el-button @click="onReset">重置</el-button>
-            </el-form-item>
-        </el-form>
-        <!-- 表格区域 -->
-        <el-table v-if="applyList.length !== 0" :data="applyList" style="width: 100%" v-loading="loading"
-            @selection-change="handleSelectionChange" :cell-style="tableRowStyle" @sort-change="sortTable"
-            :sort-orders="['ascending', 'descending']">
-            <el-table-column type="selection" width="55" />
-            <!-- <el-table-column sortable="true" label="序号" width="180" type="index" :index="indexMethod" /> -->
-            <el-table-column label="序号" prop="serialNumber" sortable="custom" width="100" align="center">
-                <!-- <template #default="row">
+  <pageContainer title="所有申请" @click="handleClickOutside">
+    <template #extra>
+      <!-- <el-button @click="onAddUser" type="primary" ref="dialog">添加用户</el-button> -->
+      <el-button @click="batchDeleteApply()" type="primary">批量删除</el-button>
+    </template>
+    <!-- 行内表单 -->
+    <el-form inline>
+      <el-form-item label="用户搜索">
+        <el-input v-model="params.username" placeholder="用户账号" />
+      </el-form-item>
+      <el-form-item label="商店搜索">
+        <el-input v-model="params.storeName" placeholder="商店名称" />
+      </el-form-item>
+      <el-form-item>
+        <el-button @click="onSearch" type="primary">搜索</el-button>
+        <el-button @click="onReset">重置</el-button>
+      </el-form-item>
+    </el-form>
+    <!-- 表格区域 -->
+    <el-table v-if="applyList.length !== 0" :data="applyList" style="width: 100%" v-loading="loading"
+      @selection-change="handleSelectionChange" :cell-style="tableRowStyle" @sort-change="sortTable"
+      :sort-orders="['ascending', 'descending']">
+      <el-table-column type="selection" width="55" />
+      <!-- <el-table-column sortable="true" label="序号" width="180" type="index" :index="indexMethod" /> -->
+      <el-table-column label="序号" prop="serialNumber" sortable="custom" width="100" align="center">
+        <!-- <template #default="row">
           {{ (params.page - 1) * params.pageSize + row.$index + 1 }}
         </template> -->
-            </el-table-column>
-            <el-table-column prop="id" label="ID" width="180" v-if="false" />
-            <el-table-column prop="avatar" label="头像" width="180" v-if="false" />
-            <el-table-column prop="username" label="用户账号" width="150" align="center" />
-            <el-table-column prop="storeName" label="商店名称" align="center" />
-            <el-table-column prop="address" label="商店地址" width="180" align="center">
+      </el-table-column>
+      <el-table-column prop="id" label="ID" width="180" v-if="false" />
+      <el-table-column prop="avatar" label="头像" width="180" v-if="false" />
+      <el-table-column prop="username" label="用户账号" width="150" align="center" />
+      <el-table-column prop="storeName" label="商店名称" align="center" />
+      <el-table-column prop="address" label="商店地址" width="180" align="center">
 
-                <template #default="{ row }">
-                    {{ (row.address === null || row.address === undefined) ? '' :
-                row.address.provinceName + '/' + row.address.cityName + '/' +
-                row.address.districtName }}
-                </template>
-            </el-table-column>
-            <el-table-column prop="address" label="详细地址" width="150" align="center">
+        <template #default="{ row }">
+          {{ (row.address === null || row.address === undefined) ? '' :
+    row.address.provinceName + '/' + row.address.cityName + '/' +
+    row.address.districtName }}
+        </template>
+      </el-table-column>
+      <el-table-column prop="address" label="详细地址" width="150" align="center">
 
-                <template #default="{ row }">
-                    {{ (row.address === null || row.address === undefined) ? '' : row.address.detail }}
-                </template>
-            </el-table-column>
-            <el-table-column prop="reason" label="拒绝原因" align="center">
-                <template #default={row}>
-                    {{(row.reason === '' || row.reason === null) ? '暂无' : row.reason }}
-                </template>
-            </el-table-column>
-            <el-table-column prop="createTime" label="申请时间" align="center" />
-            <el-table-column prop="accountStatus" label="当前申请状态" width="125" align="center">
+        <template #default="{ row }">
+          {{ (row.address === null || row.address === undefined) ? '' : row.address.detail }}
+        </template>
+      </el-table-column>
+      <el-table-column prop="reason" label="拒绝原因" align="center">
+        <template #default={row}>
+          {{ (row.reason === '' || row.reason === null) ? '暂无' : row.reason }}
+        </template>
+      </el-table-column>
+      <el-table-column prop="createTime" label="申请时间" align="center" />
+      <el-table-column prop="status" label="当前申请状态" width="125" align="center">
 
-                <template #default="scope">
-                    <div @dblclick="handleDbClick(scope.$index, scope.row)">
-                        <span v-if="!editingRow || editingRow.index !== scope.$index">
-                            {{ scope.row.status === 0 ? '待审核' : scope.row.status === 1 ? '已通过' : '被拒绝' }}
-                        </span>
-                        <el-select v-else ref="elSelectRef" v-model="scope.row.status" @change="handleSelectChange(scope.$index, $event)">
-                            <el-option label="待审核" :value='0'></el-option>
-                            <el-option label="已通过" :value='1'></el-option>
-                            <el-option label="被拒绝" :value='2'></el-option>
-                        </el-select>
-                    </div>
-                </template>
-            </el-table-column>
-            <el-table-column label="操作">
-                <template #default="{ row }">
-                    <el-button :icon="Edit" circle plain type="primary" @click="onEditApply(row)"></el-button>
-                    <el-button :icon="Delete" circle plain type="danger" @click="onDeleteApply(row)"></el-button>
-                </template>
-            </el-table-column>
-        </el-table>
+        <template #default="scope">
+          <div @dblclick="handleDbClick(scope.$index, scope.row)">
+            <span v-if="!editingRow || editingRow.index !== scope.$index">
+              {{ applyConstant.getApplyStatusLabel(row.status) }}
+            </span>
+            <el-select v-else ref="elSelectRef" v-model="scope.row.status"
+              @change="handleSelectChange(scope.$index, $event)">
+              <el-option label="待审核" :value="applyConstant.applyStatus.UNDER_REVIEW.value" />
+              <el-option label="已通过" :value="applyConstant.applyStatus.APPROVED.value" />
+              <el-option label="被拒绝" :value="applyConstant.applyStatus.REVIEW_REJECTION.value" />
+            </el-select>
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column label="操作">
+        <template #default="{ row }">
+          <el-button :icon="Edit" circle plain type="primary" @click="onEditApply(row)"></el-button>
+          <el-button :icon="Delete" circle plain type="danger" @click="onDeleteApply(row)"></el-button>
+        </template>
+      </el-table-column>
+    </el-table>
 
-        <!-- 如果美没有数据，就显示空状态 -->
-        <el-empty v-else :img-size="200"></el-empty>
-        <!-- 分页区域 -->
-        <el-pagination v-model:current-page="params.page" v-model:page-size="params.pageSize"
-            :page-sizes="[5, 10, 20, 40, 100]" layout="jumper, total, sizes, prev, pager, next" background
-            :total="total" @size-change="onSizeChange" @current-change="onCurrentChange"
-            style="margin-top: 20px; justify-content: flex-end" />
+    <!-- 如果美没有数据，就显示空状态 -->
+    <el-empty v-else :img-size="200"></el-empty>
+    <!-- 分页区域 -->
+    <el-pagination v-model:current-page="params.page" v-model:page-size="params.pageSize"
+      :page-sizes="[5, 10, 20, 40, 100]" layout="jumper, total, sizes, prev, pager, next" background :total="total"
+      @size-change="onSizeChange" @current-change="onCurrentChange"
+      style="margin-top: 20px; justify-content: flex-end" />
 
-        <ApplyEditDialog ref="openDialog" @rejection="handleRejection" :isRejection="isRejection" @dialog="onDialog"></ApplyEditDialog>
-    </pageContainer>
+    <ApplyEditDialog ref="openDialog" @rejection="handleRejection" :isRejection="isRejection" @dialog="onDialog">
+    </ApplyEditDialog>
+  </pageContainer>
 </template>
 
 <style lang='less' scoped></style>

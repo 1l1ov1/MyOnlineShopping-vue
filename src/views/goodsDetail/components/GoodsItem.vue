@@ -90,6 +90,13 @@ const buy = async () => {
     ElMessage.error('该商品已售罄')
     return
   }
+  const userAddressEmpty = !userStoreInstance.user?.addressList ||
+              userStoreInstance.user.addressList.length === 0
+
+  if (userAddressEmpty) {
+    ElMessage.error('请先去个人中心添加收货地址')
+    return
+  }
   const res = await buyGoodsService(params.value)
   if (res.code === 1) {
     ElMessage.success('购买成功')

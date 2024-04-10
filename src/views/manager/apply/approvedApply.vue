@@ -5,6 +5,7 @@ import pageContainer from '@/components/PageContainer.vue'
 import { getApplyListService, batchDeleteApplyService } from '@/api/apply'
 import { ref, onMounted } from 'vue'
 import ApplyEditDialog from './components/ApplyEdit'
+import { applyConstant } from '@/constant/constants'
 const params = ref({
   page: 1, // 当前页
   pageSize: 10, // 当前生效页的每页条数
@@ -254,9 +255,9 @@ onMounted(() => {
                 </template>
             </el-table-column>
             <el-table-column prop="createTime" label="申请时间" align="center" />
-            <el-table-column prop="accountStatus" label="当前申请状态" width="125" align="center">
+            <el-table-column prop="status" label="当前申请状态" width="125" align="center">
                 <template #default="{row}">
-                      {{ row.status === 0 ? '待审核' : row.status === 1 ? '已通过' : '被拒绝' }}
+                      {{ applyConstant.getApplyStatusLabel(row.status) }}
                 </template>
             </el-table-column>
             <el-table-column label="操作">

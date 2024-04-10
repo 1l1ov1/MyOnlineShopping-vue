@@ -23,7 +23,7 @@ const StoreSalesRangeType = {
   },
   LAST_30_DAYS: {
     value: -30,
-    label: '近30日'
+    label: '近一个月'
   },
   THIS_WEEK: {
     value: 7,

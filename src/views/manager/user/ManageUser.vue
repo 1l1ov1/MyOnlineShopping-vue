@@ -5,7 +5,7 @@ import { getUserListService, managerStartOrStopService, managerBatchDeleteUsersS
 import { Edit, Delete } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import UserAddOrEdit from './components/UserAddOrEdit'
-
+import { userConstant } from '@/constant/constants'
 // 根据data返回的每一行的数据判断,再修改这一行的样式
 // 如果改行是被禁用状态，就修改样式
 const tableRowStyle = (data) => {
@@ -28,7 +28,7 @@ const params = ref({
   avatar: '',
   status: undefined, // 用户身份
   accountStatus: undefined, // 账号状态
-  inOnline: undefined,
+  isOnline: undefined,
   address: {}, // 地址
   addressList: [], // 地址
   sort: 1 // 排序规则
@@ -219,21 +219,21 @@ const getDefaultAddress = () => {
       </el-form-item>
       <el-form-item label="用户身份">
         <el-select style="width: 100px" v-model="params.status" placeholder="请选择" clearable>
-          <el-option label="管理员" value="0" />
-          <el-option label="商家" value="2" />
-          <el-option label="普通用户" value="1" />
+          <el-option label="管理员" :value="userConstant.userStatus.MANAGER.value" />
+          <el-option label="商家" :value="userConstant.userStatus.BUSINESSMAN.value" />
+          <el-option label="普通用户" :value="userConstant.userStatus.COMMON_USER.value" />
         </el-select>
       </el-form-item>
       <el-form-item label="账户状态">
         <el-select style="width: 100px" v-model="params.accountStatus" placeholder="请选择" clearable>
-          <el-option label="正常" value="1" />
-          <el-option label="禁用" value="0" />
+          <el-option label="正常" :value="userConstant.accountStatus.ENABLE.value" />
+          <el-option label="禁用" :value="userConstant.accountStatus.DISABLE.value" />
         </el-select>
       </el-form-item>
       <el-form-item label="在线状态">
         <el-select style="width: 100px" v-model="params.isOnline" placeholder="请选择" clearable>
-          <el-option label="在线" value="1" />
-          <el-option label="不在线" value="0" />
+          <el-option label="在线" :value="userConstant.onlineStatus.IS_ONLINE.value" />
+          <el-option label="不在线" :value="userConstant.onlineStatus.IS_OFFLINE.value" />
         </el-select>
       </el-form-item>
       <el-form-item>
@@ -261,13 +261,13 @@ const getDefaultAddress = () => {
       <el-table-column prop="isOnline" label="在线状态" width="90" align="center">
 
         <template #default="{ row }">
-          {{ row.isOnline == 1 ? '在线' : '不在线' }}
+          {{ userConstant.getOnlineStatusLabel(row.isOnline) }}
         </template>
       </el-table-column>
       <el-table-column prop="status" label="用户身份" width="100" align="center">
 
         <template #default="{ row }">
-          {{ row.status == 0 ? '管理员' : row.status == 1 ? '普通用户' : '商家' }}
+          {{ userConstant.getUserStatusLabel(row.status) }}
         </template>
       </el-table-column>
       <el-table-column prop="phone" label="电话" align="center" />
@@ -288,10 +288,12 @@ const getDefaultAddress = () => {
       <el-table-column prop="accountStatus" label="当前账号状态" width="125" align="center">
 
         <template #default="{ row }">
-          <!-- 如果是管理员，就不能修改管理员的账号状态 -->
-          <el-link :underline="false" :disabled="row.status === 0" type="primary" @click="changeAccountStatus(row)">{{
-        row.accountStatus == 0 ? '禁用'
-          : '正常' }}</el-link>
+          <!-- 如果是管理员或超级管理员，就不能修改管理员或超级管理员的账号状态 -->
+          <el-link :underline="false"
+          :disabled="row.status === userConstant.userStatus.MANAGER.value
+          || row.status === userConstant.userStatus.SUPER_ADMINISTRATOR.value"
+          type="primary" @click="changeAccountStatus(row)">{{
+      userConstant.getAccountStatusLabel(row.accountStatus) }}</el-link>
         </template>
       </el-table-column>
       <el-table-column label="操作">

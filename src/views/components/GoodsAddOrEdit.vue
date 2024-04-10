@@ -6,6 +6,7 @@ import { AddGoodsService, UpdateGoodsService, GetGoodsDetailService } from '@/ap
 import { uploadGoodsFile } from '@/api/uploadImg'
 import { UploadFilled } from '@element-plus/icons-vue'
 import { getCategoryListService } from '@/api/category'
+import { goodsConstant } from '@/constant/constants'
 const userStoreInstance = userStore()
 // 是否展示表单
 const dialogFormVisible = ref(false)
@@ -130,7 +131,7 @@ const onSubmit = async () => {
   emit('dialog')
 }
 // 折扣项
-const discountItem = ref(
+/* const discountItem = ref(
   [{
     label: '免费',
     value: 0
@@ -211,7 +212,7 @@ const discountItem = ref(
     label: '原价',
     value: 1
   }]
-)
+) */
 const imgUrl = ref('')
 const imgModel = ref()
 const imgBinary = ref()
@@ -338,7 +339,7 @@ defineExpose({
       </el-form-item>
       <el-form-item label="商品折扣" prop="discount">
         <el-select v-model="formModel.discount" placeholder="请选择商品折扣" style="width: 240px">
-          <el-option v-for="item in discountItem" :key="item.value" :label="item.label" :value="item.value" />
+          <el-option v-for="item in goodsConstant.goodsDiscount" :key="item.value" :label="item.label" :value="item.value" />
         </el-select>
       </el-form-item>
       <el-form-item label="商品状态" prop="status">

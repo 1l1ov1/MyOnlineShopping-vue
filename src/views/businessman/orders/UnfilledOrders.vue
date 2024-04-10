@@ -5,7 +5,7 @@ import { Delete } from '@element-plus/icons-vue'
 import pageContainer from '@/components/PageContainer.vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { userStore } from '@/store'
-
+import { ordersConstant } from '@/constant/constants'
 const userStoreInstance = userStore()
 const params = ref({
   page: 1, // 当前页
@@ -241,15 +241,14 @@ onMounted(() => {
         <template #default="scope">
           <div @dblclick="handleDbClick(scope.$index, scope.row)">
             <span v-if="!editingRow || editingRow.index !== scope.$index">
-              {{ scope.row.status === 1 ? '未发货' : scope.row.status === 2
-    ? '已发货' : scope.row.status === 3 ? '退款' : scope.row.status === 4 ? '用户已签收' : '交易完成' }}
+              {{ ordersConstant.getOrdersStatusLabel(scope.row.status) }}
             </span>
             <el-select v-else ref="elSelectRef" v-model="scope.row.status"
               @change="handleSelectChange(scope.$index, $event)">
-              <el-option label="未发货" :value='1'></el-option>
-              <el-option label="已发货" :value='2'></el-option>
-              <el-option label="用户已签收" :value='4'></el-option>
-              <el-option label="交易完成" :value='5'></el-option>
+              <el-option label="未发货" :value="ordersConstant.ordersStatus.UNSHIPPED_ORDER.value" />
+              <el-option label="已发货" :value="ordersConstant.ordersStatus.SHIPPED_ORDER.value" />
+              <el-option label="用户已签收" :value="ordersConstant.ordersStatus.USER_RECEIVE_PRODUCT.value" />
+              <el-option label="交易完成" :value="ordersConstant.ordersStatus.SUCCESSFUL_ORDER.value" />
               <!-- <el-option label="退款" :value='3'></el-option> -->
             </el-select>
           </div>

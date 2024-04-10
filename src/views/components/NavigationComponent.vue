@@ -5,6 +5,7 @@ import { useRouter } from 'vue-router'
 import { userLogoutService, userRechargeService } from '@/api/user'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { InfoFilled } from '@element-plus/icons-vue'
+import { userConstant } from '@/constant/constants'
 const userStoreInstance = userStore()
 const router = useRouter()
 onMounted(() => {
@@ -44,10 +45,11 @@ const logout = async () => {
 const goToBack = () => {
   const status = userStoreInstance.user.status
   // 如果是管理员
-  if (status === 0) {
+  if (status === userConstant.userStatus.SUPER_ADMINISTRATOR.value ||
+      status === userConstant.userStatus.MANAGER.value) {
     router.push('/managerBack')
     // 如果是商家
-  } else if (status === 2) {
+  } else if (status === userConstant.userStatus.BUSINESS.value) {
     router.push('/businessBack')
   }
 }
@@ -91,10 +93,13 @@ const openRecharge = () => {
           包：{{ userStoreInstance.user.money.toFixed(2) }}</el-text>
         <el-text type="primary" id="moneyPacket" v-else>钱 包: 0.00</el-text>
       </el-menu-item>
-      <el-menu-item index="0-1">
+      <el-menu-item index="0-2">
         <span @click="openRecharge" style="width: 100%;" id="rechargeBtn">充 值</span>
       </el-menu-item>
       <el-menu-item index="0-3">
+        <span @click="() => router.push('/userProfile')" style="width: 100%;" id="rechargeBtn">个 人 中 心</span>
+      </el-menu-item>
+      <el-menu-item index="0-4">
         <el-popconfirm width="220" confirm-button-text="确认" cancel-button-text="取消" :icon="InfoFilled"
           icon-color="#626AEF" title="您确定要退出账号吗？" @confirm="logout">
 
@@ -108,9 +113,9 @@ const openRecharge = () => {
     <el-menu-item index="1"><el-link @click="() => router.push('/')">首页</el-link></el-menu-item>
     <el-menu-item index="2"><el-link @click="() => router.push('/login')">登录</el-link></el-menu-item>
     <el-menu-item index="3"><el-link @click="() => router.push('/register')">注册</el-link></el-menu-item>
-    <el-menu-item index="4" v-if="userStoreInstance.user.status !== 1"><el-link
+    <el-menu-item index="4" v-if="userStoreInstance.user.status !== userConstant.userStatus.COMMON_USER.value"><el-link
         @click="goToBack">工作区</el-link></el-menu-item>
-    <el-menu-item index="5" v-if="userStoreInstance.user.status === 1"><el-link
+    <el-menu-item index="5" v-if="userStoreInstance.user.status === userConstant.userStatus.COMMON_USER.value"><el-link
         @click="() => router.push('/createStore')">成为店家</el-link></el-menu-item>
     <el-sub-menu index="6">
 

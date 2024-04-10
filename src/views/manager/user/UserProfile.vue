@@ -2,14 +2,15 @@
 import { userStore } from '@/store/index.js'
 import { ElMessage } from 'element-plus'
 import { ref, onMounted, nextTick } from 'vue'
-import { userUpdateInfoService, updateAddressDefault } from '@/api/user.js'
+import { userUpdateInfoService, updateAddressDefault, deleteAddress } from '@/api/user.js'
 import pageContainer from '@/components/PageContainer.vue'
-import { UploadFilled, Edit } from '@element-plus/icons-vue'
+import { UploadFilled, Edit, Delete } from '@element-plus/icons-vue'
 import {
   regionData, // 省市区三级联动数据]
   codeToText
   // pcaTextArr // 省市区三级联动数据，纯汉字
 } from 'element-china-area-data'
+import AddAddress from '@/views/components/AddAddress.vue'
 const userStoreInstance = userStore()
 // 得到仓库中的user
 
@@ -129,13 +130,35 @@ const onEditAddress = async (row) => {
   const res = await updateAddressDefault(row)
   if (res.code === 1) {
     ElMessage.success('修改成功')
-    // 重新刷新
-    await userStoreInstance.getUser()
-    nextTick(() => {
-      // 更新数据
-      formModel.value = { ...userStoreInstance.user }
-    })
+    updateData()
   }
+}
+
+// 删除地址
+const onDeleteAddress = async (row) => {
+  const res = await deleteAddress(row.id)
+  if (res.code === 1) {
+    ElMessage.success('修改成功')
+    updateData()
+  }
+}
+const openDialog = ref()
+const addAddress = () => {
+  openDialog.value.open()
+}
+
+const onDialog = () => {
+  // 重新刷新
+  updateData()
+}
+
+const updateData = async () => {
+// 重新刷新
+  await userStoreInstance.getUser()
+  nextTick(() => {
+    // 更新数据
+    formModel.value = { ...userStoreInstance.user }
+  })
 }
 onMounted(() => {
   selectedOptions.value = formModel.value.addressList
@@ -211,17 +234,20 @@ onMounted(() => {
                 <template #default="{row}">
                   <div v-if="row.isDefault === 0">
                      <el-button :icon="Edit" circle plain type="primary" @click="onEditAddress(row)"></el-button>
-                  </div>
+                     <el-button :icon="Delete" circle plain type="danger" @click="onDeleteAddress(row)"></el-button>
+                    </div>
                 </template>
               </el-table-column>
             </el-table>
           </el-form-item>
           <el-form-item>
+            <el-button @click="addAddress" type="primary">添加地址</el-button>
             <el-button @click="onSubmit" type="primary">提交修改</el-button>
           </el-form-item>
         </el-form>
       </el-col>
     </el-row>
+    <AddAddress ref="openDialog" @dialog="onDialog"></AddAddress>
   </page-container>
 </template>
 

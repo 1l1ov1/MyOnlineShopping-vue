@@ -10,7 +10,8 @@ const params = ref({
   sellerName: '',
   username: '',
   storeName: '',
-  storeId: userStoreInstance.user.store.id,
+  // storeId: userStoreInstance.user.store.id,
+  userId: userStoreInstance.user.id,
   sort: 0,
   page: 1,
   pageSize: 10
@@ -108,7 +109,7 @@ onMounted(() => {
       <el-table-column label="序号" prop="serialNumber" sortable="custom" width="90" align="center">
       </el-table-column>
       <el-table-column prop="id" label="ID" width="180" v-if="false" />
-      <el-table-column prop="username" label="买家账号" width="100" align="center" />
+      <el-table-column prop="username" label="店家账号" width="100" align="center" />
       <!-- <el-table-column prop="phone" label="买家电话" align="center" width="100"/> -->
       <el-table-column prop="goodsName" label="商品名" align="center"></el-table-column>
       <el-table-column prop="number" label="商品数量" align="center">

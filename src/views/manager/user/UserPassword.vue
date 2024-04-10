@@ -5,14 +5,16 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { userUpdatePassService } from '@/api/user.js'
 import pageContainer from '@/components/PageContainer.vue'
+import { passwordConstant } from '@/constant/constants'
 const pwdForm = ref({
   oldPwd: '',
   newPwd: '',
-  rePwd: ''
+  rePwd: '',
+  type: passwordConstant.passwordType.UPDATE.value
 })
 
 const checkOldSame = (rule, value, cb) => {
-  if (value === pwdForm.value.old_pwd) {
+  if (value === pwdForm.value.oldPwd) {
     cb(new Error('原密码和新密码不能一样!'))
   } else {
     cb()
@@ -20,7 +22,7 @@ const checkOldSame = (rule, value, cb) => {
 }
 
 const checkNewSame = (rule, value, cb) => {
-  if (value !== pwdForm.value.new_pwd) {
+  if (value !== pwdForm.value.newPwd) {
     cb(new Error('新密码和确认再次输入的新密码不一样!'))
   } else {
     cb()
@@ -64,7 +66,6 @@ const userStoreInstance = userStore()
 const onSubmit = async () => {
   const valid = await formRef.value.validate()
   if (valid) {
-    console.log(pwdForm.value)
     await userUpdatePassService(pwdForm.value)
     ElMessage({ type: 'success', message: '更换密码成功' })
     userStoreInstance.setToken('')

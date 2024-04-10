@@ -5,7 +5,7 @@ import { Delete } from '@element-plus/icons-vue'
 import pageContainer from '@/components/PageContainer.vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { userStore } from '@/store'
-
+import { ordersConstant } from '@/constant/constants'
 const userStoreInstance = userStore()
 const params = ref({
   page: 1, // 当前页
@@ -251,9 +251,7 @@ onMounted(() => {
                         </el-select>
 
                     </div> -->
-                    {{ scope.row.status === 1 ? '未发货' : scope.row.status === 2
-                            ? '已发货' : scope.row.status === 3 ? '退款' : scope.row.status === 4 ? '用户已签收' : '交易完成' }}
-
+                    {{ ordersConstant.getOrdersStatusLabel(scope.row.status) }}
                 </template>
             </el-table-column>
             <el-table-column label="操作">

@@ -6,11 +6,12 @@ import { Edit, Delete } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import StoreAddOrEdit from '../../components/StoreAddOrEdit'
 import { userStore } from '@/store'
+import { storeConstant } from '@/constant/constants'
 const userStoreInstance = userStore()
 // 根据data返回的每一行的数据判断,再修改这一行的样式
 // 如果改行是被禁用状态，就修改样式
 const tableRowStyle = (data) => {
-  if (data.row.status === 0) {
+  if (data.row.status === storeConstant.storeStatus.CLOSE.value) {
     return {
       background: '#fdf6ec'
     }
@@ -82,7 +83,7 @@ const onCurrentChange = (val) => {
 }
 const changeStoreStatus = (row) => {
   updateRef.value = row
-  const msg = row.status === 0 ? '开店中' : '关店中'
+  const msg = storeConstant.getReversStoreStatusLabel(row.status)
   ElMessageBox.confirm(
     '确认是否修改编号' + row.id + '：' + row.storeName + '商店状态为' + msg,
     '警告',
@@ -208,8 +209,8 @@ const sortTable = ({ column, prop, order }) => {
       </el-form-item>
       <el-form-item label="账户状态">
         <el-select style="width: 100px" v-model="params.status" placeholder="请选择" clearable>
-          <el-option label="开店中" value="1" />
-          <el-option label="关店中" value="0" />
+          <el-option label="开店中" :value="storeConstant.storeStatus.OPEN.value" />
+          <el-option label="关店中" :value="storeConstant.storeStatus.CLOSE.value" />
         </el-select>
       </el-form-item>
       <el-form-item>
@@ -257,8 +258,7 @@ const sortTable = ({ column, prop, order }) => {
         <template #default="{ row }">
           <!-- 如果是管理员，就不能修改管理员的账号状态 -->
           <el-link :underline="false" type="primary" @click="changeStoreStatus(row)">{{
-        row.status == 0 ? '关店中'
-          : '开店中' }}</el-link>
+       storeConstant.getStoreStatusLabel(row.status) }}</el-link>
         </template>
       </el-table-column>
       <el-table-column label="操作">

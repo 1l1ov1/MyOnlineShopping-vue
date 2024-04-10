@@ -160,18 +160,6 @@ const onSubmit = async () => {
   emit('dialog')
 }
 
-// const options = ref(regionData)
-// 选择完地址后的回调
-// const handleChange = (val) => {
-//   formModel.value.addressList[0].provinceCode = val[0]
-//   formModel.value.addressList[0].provinceName = codeToText[val[0]]
-
-//   formModel.value.addressList[0].cityCode = val[1]
-//   formModel.value.addressList[0].cityName = codeToText[val[1]]
-
-//   formModel.value.addressList[0].districtCode = val[2]
-//   formModel.value.addressList[0].districtName = codeToText[val[2]]
-// }
 // 子组件回调
 const chooseAddress = (val) => {
   formModel.value.addressList[0].provinceCode = val[0]
@@ -201,13 +189,7 @@ defineExpose({
         <el-input v-model="formModel.phone" autocomplete="off" />
       </el-form-item>
       <el-form-item label="默认地址" prop="address">
-        <!-- <el-input v-model="formModel.address" autocomplete="off" /> -->
-        <!--带isall参数和leave参数示例-->
-        <!-- <elui-china-area-dht :leave="3" @change="writeAddress">
-        </elui-china-area-dht> -->
-       <!--  <el-cascader size="large" :options="options" clearable v-model="selectedOptions" placeholder="请选择地址"
-          @change="handleChange" /> -->
-          <SelectAddress :addressList="formModel.addressList" @chooseAddress="chooseAddress"></SelectAddress>
+          <SelectAddress :defaultAddress="formModel.addressList" @chooseAddress="chooseAddress"></SelectAddress>
       </el-form-item>
       <el-form-item label="详细地址">
         <el-input v-model="formModel.addressList[0].detail" placeholder="请输入详细地址（精确到门牌号）" />

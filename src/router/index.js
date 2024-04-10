@@ -25,6 +25,11 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/register/RegisterIndex.vue')
   },
   {
+    path: '/forgetPassword',
+    name: 'forgetPassword',
+    component: () => import('../views/forgetPassword/forgetPassword.vue')
+  },
+  {
     path: '/goodsDetail/:id',
     name: 'goodsDetail',
     component: () => import('../views/goodsDetail/GoodsDetail.vue')
@@ -70,6 +75,11 @@ const routes = [
     component: () => import('../views/search/SearchStore.vue')
   },
   {
+    path: '/userProfile',
+    name: 'userProfile',
+    component: () => import('../views/personCenter/UserProfile.vue')
+  },
+  {
     path: '/managerBack',
     name: 'managerBack',
     redirect: '/managerBack/user',
@@ -78,6 +88,10 @@ const routes = [
       {
         path: '/managerBack/statistic',
         component: () => import('../views/manager/statistic/StatisticsIndex.vue')
+      },
+      {
+        path: '/managerBack/withdrawRecord',
+        component: () => import('../views/manager/withdrawRecord/WithdrawRecord.vue')
       },
       {
         path: '/managerBack/user',
@@ -218,7 +232,7 @@ const router = createRouter({
 router.beforeEach((to) => {
   // 如果没有token, 且访问的是非登录页且不是主页，拦截到登录，其他情况正常放行
   const userStoreInstance = userStore()
-  if (!userStoreInstance.token && to.path !== '/login' && to.path !== '/' && to.path !== '/register') return '/login'
+  if (!userStoreInstance.token && to.path !== '/login' && to.path !== '/' && to.path !== '/register' && to.path !== '/forgetPassword') return '/login'
 })
 
 export default router

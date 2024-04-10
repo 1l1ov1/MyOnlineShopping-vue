@@ -5,7 +5,7 @@ import { Delete } from '@element-plus/icons-vue'
 import pageContainer from '@/components/PageContainer.vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { userStore } from '@/store'
-
+import { ordersConstant } from '@/constant/constants'
 const userStoreInstance = userStore()
 const params = ref({
   page: 1, // 当前页
@@ -183,96 +183,95 @@ onMounted(() => {
 </script>
 
 <template>
-    <pageContainer title="订单管理" @click="handleClickOutside">
-        <template #extra>
-            <!-- <el-button @click="onAddUser" type="primary" ref="dialog">添加用户</el-button> -->
-            <el-button @click="batchDeleteOrders()" type="primary">批量删除</el-button>
-        </template>
-        <!-- 行内表单 -->
-        <el-form inline>
-            <el-form-item label="用户搜索">
-                <el-input v-model="params.username" placeholder="用户账号" />
-            </el-form-item>
-            <!-- <el-form-item label="订单状态">
+  <pageContainer title="订单管理" @click="handleClickOutside">
+    <template #extra>
+      <!-- <el-button @click="onAddUser" type="primary" ref="dialog">添加用户</el-button> -->
+      <el-button @click="batchDeleteOrders()" type="primary">批量删除</el-button>
+    </template>
+    <!-- 行内表单 -->
+    <el-form inline>
+      <el-form-item label="用户搜索">
+        <el-input v-model="params.username" placeholder="用户账号" />
+      </el-form-item>
+      <!-- <el-form-item label="订单状态">
                 <el-select style="width: 100px" v-model="params.status" placeholder="请选择" clearable>
                     <el-option label="未发货" value="1" />
                     <el-option label="已发货" value="2" />
                     <el-option label="退款" value="3" />
                 </el-select>
             </el-form-item> -->
-            <el-form-item label="商店名">
-                <el-input v-model="params.store.storeName" placeholder="请输入商店名" />
-            </el-form-item>
-            <el-form-item>
-                <el-button @click="onSearch" type="primary">搜索</el-button>
-                <el-button @click="onReset">重置</el-button>
-            </el-form-item>
-        </el-form>
-        <!-- 表格区域 -->
-        <el-table v-if="ordersList.length !== 0" :data="ordersList" style="width: 100%" v-loading="loading"
-            @selection-change="handleSelectionChange" :cell-style="tableRowStyle" @sort-change="sortTable"
-            :sort-orders="['ascending', 'descending']"
-            ref="tableRef">
-            <el-table-column type="selection" width="40" />
-            <!-- <el-table-column sortable="true" label="序号" width="180" type="index" :index="indexMethod" /> -->
-            <el-table-column label="序号" prop="serialNumber" sortable="custom" width="90" align="center">
-            </el-table-column>
-            <el-table-column prop="id" label="ID" width="180" v-if="false" />
-            <el-table-column prop="username" label="买家账号" width="150" align="center" />
-            <el-table-column prop="phone" label="买家电话" align="center" />
-            <el-table-column prop="goodsName" label="商品名" align="center"></el-table-column>
-            <el-table-column prop="number" label="商品数量" align="center"></el-table-column>
-            <el-table-column prop="totalPrice" label="支付价格" align="center"></el-table-column>
-            <el-table-column prop="store.storeName" label="店名" align="center"></el-table-column>
-            <el-table-column prop="address" label="买家收获地址">
-                <template #default="{ row }">
-                    {{ (row.address === null || row.address === undefined) ? '' : row.address.provinceName + '/' +
-                row.address.cityName + '/' +
-                row.address.districtName }}
-                </template>
-            </el-table-column>
-            <el-table-column prop="address" label="买家详细地址">
+      <el-form-item label="商店名">
+        <el-input v-model="params.store.storeName" placeholder="请输入商店名" />
+      </el-form-item>
+      <el-form-item>
+        <el-button @click="onSearch" type="primary">搜索</el-button>
+        <el-button @click="onReset">重置</el-button>
+      </el-form-item>
+    </el-form>
+    <!-- 表格区域 -->
+    <el-table v-if="ordersList.length !== 0" :data="ordersList" style="width: 100%" v-loading="loading"
+      @selection-change="handleSelectionChange" :cell-style="tableRowStyle" @sort-change="sortTable"
+      :sort-orders="['ascending', 'descending']" ref="tableRef">
+      <el-table-column type="selection" width="40" />
+      <!-- <el-table-column sortable="true" label="序号" width="180" type="index" :index="indexMethod" /> -->
+      <el-table-column label="序号" prop="serialNumber" sortable="custom" width="90" align="center">
+      </el-table-column>
+      <el-table-column prop="id" label="ID" width="180" v-if="false" />
+      <el-table-column prop="username" label="买家账号" width="150" align="center" />
+      <el-table-column prop="phone" label="买家电话" align="center" />
+      <el-table-column prop="goodsName" label="商品名" align="center"></el-table-column>
+      <el-table-column prop="number" label="商品数量" align="center"></el-table-column>
+      <el-table-column prop="totalPrice" label="支付价格" align="center"></el-table-column>
+      <el-table-column prop="store.storeName" label="店名" align="center"></el-table-column>
+      <el-table-column prop="address" label="买家收获地址">
+        <template #default="{ row }">
+          {{ (row.address === null || row.address === undefined) ? '' : row.address.provinceName + '/' +
+    row.address.cityName + '/' +
+    row.address.districtName }}
+        </template>
+      </el-table-column>
+      <el-table-column prop="address" label="买家详细地址">
 
-                <template #default="{ row }">
-                    {{ (row.address === null || row.address === undefined) ? '' : row.address.detail }}
-                </template>
-            </el-table-column>
-            <el-table-column prop="createTime" label="订单创建时间" align="center" />
-            <el-table-column prop="status" label="订单状态" width="110" align="center">
-                <template #default="scope">
-                    <div @dblclick="handleDbClick(scope.$index, scope.row)">
-                        <span v-if="!editingRow || editingRow.index !== scope.$index">
-                            {{ scope.row.status === 1 ? '未发货' : scope.row.status === 2
-                            ? '已发货' : scope.row.status === 3 ? '退款' : scope.row.status === 4 ? '用户已签收' : '交易完成' }}
-                        </span>
-                        <el-select v-else ref="elSelectRef" v-model="scope.row.status" @change="handleSelectChange(scope.$index, $event)">
-                            <el-option label="退款" :value='3'></el-option>
-                            <el-option label="用户已签收" :value='4'></el-option>
-                            <el-option label="交易完成" :value='5'></el-option>
-                        </el-select>
-                    </div>
+        <template #default="{ row }">
+          {{ (row.address === null || row.address === undefined) ? '' : row.address.detail }}
+        </template>
+      </el-table-column>
+      <el-table-column prop="createTime" label="订单创建时间" align="center" />
+      <el-table-column prop="status" label="订单状态" width="110" align="center">
+        <template #default="scope">
+          <div @dblclick="handleDbClick(scope.$index, scope.row)">
+            <span v-if="!editingRow || editingRow.index !== scope.$index">
+              {{ ordersConstant.getOrdersStatusLabel(scope.row.status) }}
+            </span>
+            <el-select v-else ref="elSelectRef" v-model="scope.row.status"
+              @change="handleSelectChange(scope.$index, $event)">
+              <el-option label="退款" :value="ordersConstant.ordersStatus.REFUNDED_ORDER.value" />
+              <el-option label="用户已签收" :value="ordersConstant.ordersStatus.USER_RECEIVE_PRODUCT.value" />
+              <el-option label="交易完成" :value="ordersConstant.ordersStatus.SUCCESSFUL_ORDER.value" />
+            </el-select>
+          </div>
 
-                </template>
-            </el-table-column>
-            <el-table-column label="操作">
+        </template>
+      </el-table-column>
+      <el-table-column label="操作">
 
-                <template #default="{ row }">
-                    <!-- <el-button :icon="Edit" circle plain type="primary" @click="onEditUser(row)"></el-button> -->
-                    <el-button :icon="Delete" circle plain type="danger" @click="onDeleteOrders(row)"></el-button>
-                </template>
-            </el-table-column>
-        </el-table>
+        <template #default="{ row }">
+          <!-- <el-button :icon="Edit" circle plain type="primary" @click="onEditUser(row)"></el-button> -->
+          <el-button :icon="Delete" circle plain type="danger" @click="onDeleteOrders(row)"></el-button>
+        </template>
+      </el-table-column>
+    </el-table>
 
-        <!-- 如果美没有数据，就显示空状态 -->
-        <el-empty v-else :img-size="200"></el-empty>
-        <!-- 分页区域 -->
-        <el-pagination v-model:current-page="params.page" v-model:page-size="params.pageSize"
-            :page-sizes="[5, 10, 20, 40, 100]" layout="jumper, total, sizes, prev, pager, next" background
-            :total="total" @size-change="onSizeChange" @current-change="onCurrentChange"
-            style="margin-top: 20px; justify-content: flex-end" />
+    <!-- 如果美没有数据，就显示空状态 -->
+    <el-empty v-else :img-size="200"></el-empty>
+    <!-- 分页区域 -->
+    <el-pagination v-model:current-page="params.page" v-model:page-size="params.pageSize"
+      :page-sizes="[5, 10, 20, 40, 100]" layout="jumper, total, sizes, prev, pager, next" background :total="total"
+      @size-change="onSizeChange" @current-change="onCurrentChange"
+      style="margin-top: 20px; justify-content: flex-end" />
 
-        <!--       <UserAddOrEdit ref="openDialog" @dialog="onDialog"></UserAddOrEdit> -->
-    </pageContainer>
+    <!--       <UserAddOrEdit ref="openDialog" @dialog="onDialog"></UserAddOrEdit> -->
+  </pageContainer>
 </template>
 
 <style lang="less" scoped></style>

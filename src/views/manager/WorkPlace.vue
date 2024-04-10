@@ -77,6 +77,12 @@ const open = ref(false)
                     </el-icon>
                     <span>数据统计</span>
                 </el-menu-item>
+                <el-menu-item v-if="userStoreInstance.user.status === 0" index="/managerBack/withdrawRecord" id="manage-withdraw-item">
+                    <el-icon>
+                        <PieChart />
+                    </el-icon>
+                    <span>提现记录</span>
+                </el-menu-item>
                 <el-menu-item index="/managerBack/user" id="manage-user-item">
                     <el-icon>
                         <UserFilled />
