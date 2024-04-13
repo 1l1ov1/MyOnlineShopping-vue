@@ -49,7 +49,7 @@ const goToBack = () => {
       status === userConstant.userStatus.MANAGER.value) {
     router.push('/managerBack')
     // 如果是商家
-  } else if (status === userConstant.userStatus.BUSINESS.value) {
+  } else if (status === userConstant.userStatus.BUSINESSMAN.value) {
     router.push('/businessBack')
   }
 }

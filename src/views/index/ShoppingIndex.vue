@@ -108,9 +108,9 @@ const handleSubmit = (item) => {
     })
   }
 }
-onMounted(() => {
+onMounted(async () => {
+  await getCategoryList()
   getAllGoodsList()
-  getCategoryList()
 })
 </script>
 

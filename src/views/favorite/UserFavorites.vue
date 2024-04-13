@@ -5,7 +5,7 @@ import { userStore } from '@/store'
 import NavigationComponent from '@/views/components/NavigationComponent.vue'
 import FooterComponent from '@/views/components/FooterComponent.vue'
 import router from '@/router'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
 const userStoreInstance = userStore()
 const user = ref({
   ...userStoreInstance.user
@@ -21,8 +21,9 @@ const storeFavoriteList = ref()
 const getUserFavorites = async () => {
   const res = await queryFavoriteService(user.value.id)
   favoriteList.value = res.data.favoriteList
+  // 如果是商品 拥有goodsId和storeId,如果是商店只拥有storeId
   goodsFavoriteList.value = favoriteList.value.filter(item => item.goodsId !== null)
-  storeFavoriteList.value = favoriteList.value.filter(item => item.storeId !== null)
+  storeFavoriteList.value = favoriteList.value.filter(item => item.storeId !== null && item.goodsId === null)
 }
 // 商品勾选框
 const goodsCheckBox = ref([])
@@ -51,31 +52,42 @@ const beforeLeave = (activeName, oldActiveName) => {
 }
 // 点击标签页
 const all = ref('全选')
+
 const tabClick = (tabPaneContext, event) => {
   const label = tabPaneContext.props.label
+  // 提前判断是否为收藏类型
+  const isProduct = isGoodsFavorite.value
+  // 确定要操作的类型
+  const favoriteType = isProduct ? FavoriteType.PRODUCT : FavoriteType.STORE
   // 如果点击的是删除
   if (label === '删除') {
-    if (isGoodsFavorite.value) {
-      findSelected(goodsCheckBox.value, FavoriteType.PRODUCT)
-      deleteFavorite(FavoriteType.PRODUCT)
-    } else {
-      findSelected(storeCheckBox.value, FavoriteType.STORE)
-      deleteFavorite(FavoriteType.STORE)
+    isProduct
+      ? findSelected(goodsCheckBox.value, favoriteType)
+      : findSelected(storeCheckBox.value, favoriteType)
+
+    if (selectedBox.value.length === 0) {
+      ElMessage.warning('请选择要删除的收藏')
+      return
     }
+    ElMessageBox.confirm(
+      '确定要删除这些收藏吗？',
+      '删除收藏',
+      {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }
+    ).then(async () => {
+      await deleteFavorite(favoriteType)
+    }).catch(() => {})
   } else if (['全选', '取消'].includes(label)) {
     all.value = label === '全选' ? '取消' : '全选'
-    if (isGoodsFavorite.value) {
-      changeAll(FavoriteType.PRODUCT, label === '全选')
-    } else {
-      changeAll(FavoriteType.STORE, label === '全选')
-    }
+    // 使用三元运算符简化逻辑
+    changeAll(favoriteType, label === '全选')
   }
 }
 // 删除
 const deleteFavorite = async (target) => {
-  if (selectedBox.value.length === 0) {
-    return
-  }
   const ids = selectedBox.value.join(',')
   const res = await batchDeleteFavoriteService(ids, target)
   if (res.code === 1) {

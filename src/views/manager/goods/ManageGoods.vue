@@ -26,6 +26,7 @@ const params = ref({
   discount: undefined, // 商品折扣
   total: undefined, // 商品总数
   coverPic: '', // 商品封面
+  storeId: undefined,
   store: {
     storeName: '',
     userId: userStoreInstance.user.store === null ? undefined : userStoreInstance.user.store.userId
