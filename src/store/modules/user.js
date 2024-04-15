@@ -28,6 +28,15 @@ export const userStore = defineStore(
       user.value = obj
     }
 
+    const reminder = ref({
+      clickedTimer: {},
+      isClicked: {}
+    })
+
+    const setReminder = (obj) => {
+      reminder.value = obj
+    }
+
     return {
       token,
       setToken,
@@ -35,7 +44,9 @@ export const userStore = defineStore(
       firstComing,
       user,
       getUser,
-      setUser
+      setUser,
+      reminder,
+      setReminder
     }
   },
   {

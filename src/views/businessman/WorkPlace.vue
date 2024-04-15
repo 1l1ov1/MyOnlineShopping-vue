@@ -10,7 +10,7 @@ import {
   PieChart,
   Box
 } from '@element-plus/icons-vue'
-import { ElMessageBox } from 'element-plus'
+import { ElMessageBox, ElNotification } from 'element-plus'
 import avatar from '@/assets/default.png'
 import { userStore } from '@/store/index.js'
 import { onMounted, ref } from 'vue'
@@ -21,7 +21,8 @@ const router = useRouter()
 onMounted(() => {
   userStoreInstance.getUser()
 })
-
+const audioVo = ref()
+const audioVo2 = ref()
 const onCommand = async (command) => {
   if (command === 'logout') {
     await ElMessageBox.confirm('你确认退出在线商城吗？', '温馨提示', {
@@ -56,6 +57,72 @@ const onChange = (number) => {
 // 启用蒙层时，target 元素区域是否可以点击。
 const enableClick = ref(false)
 const open = ref(false)
+// 当商家进入后台，就开始进行socket连接
+const Websocket = () => {
+  const wsUrl = 'ws://localhost:7070/api/ws/' + userStoreInstance.user.store.id
+  let socket
+
+  // 如果浏览器支持，创建 WebSocket 连接
+  if ('WebSocket' in window) {
+    socket = new WebSocket(wsUrl)
+  } else {
+    console.error('您的浏览器不支持 WebSocket。')
+    return
+  }
+  // 定义 WebSocket 连接的事件处理器
+  socket.addEventListener('open', handleOpen)
+  socket.addEventListener('message', handleMessage)
+  socket.addEventListener('error', handleError)
+  socket.addEventListener('close', handleClose)
+
+  // 连接打开
+  function handleOpen (event) {
+    console.log('WebSocket 连接已建立。')
+    // 可在此处发送初始消息或执行任何设置任务
+  }
+
+  // 从服务器接收到消息
+  function handleMessage (msg) {
+    // 清空时间
+    audioVo.value.currentTime = 0
+    audioVo2.value.currentTime = 0
+    const jsonMsg = JSON.parse(msg.data)
+    // 如果是下订单消息
+    if (jsonMsg.type === 1) {
+      audioVo2.value.play()
+    } else if (jsonMsg.type === 2) {
+      // 如果是用户催单
+      audioVo.value.play()
+    }
+    // 显示数据
+    ElNotification.success({
+      title: jsonMsg.type === 1 ? '订单通知' : '催单通知',
+      dangerouslyUseHTMLString: true,
+      message: `${
+            jsonMsg.type === 1
+              ? `<span>您有1个<span style=color:#419EFF>订单待处理</span>,${jsonMsg.content},请及时查收</span>`
+              : `${jsonMsg.content}<span style='color:#419EFF;cursor: pointer'>去处理</span>`
+          }`,
+      type: 'warning'
+    })
+  }
+
+  // 发生错误
+  function handleError (error) {
+    console.error('WebSocket 错误:', error)
+    // 适当地处理错误（例如：重试、通知用户）
+  }
+
+  // 连接关闭
+  function handleClose (event) {
+    console.log('WebSocket 连接已关闭。')
+    // 在此处执行任何清理任务或重新连接逻辑
+  }
+}
+
+onMounted(() => {
+  Websocket()
+})
 </script>
 
 <template>
@@ -67,6 +134,14 @@ const open = ref(false)
     el-menu-item 菜单项
      index="/article/channel" 配置的是访问的跳转路径，配合 :default-active的值，实现高亮
    -->
+   <audio ref="audioVo"
+               hidden>
+          <source src="@/assets/用户催单提示音.mp3" type="audio/mp3" />
+        </audio>
+        <audio ref="audioVo2"
+               hidden>
+          <source src="@/assets/新订单提示音.mp3" type="audio/mp3" />
+    </audio>
     <el-container class="layout-container">
         <el-aside width="200px">
             <div class="el-aside__logo"></div>

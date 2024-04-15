@@ -91,3 +91,12 @@ export const deleteAddress = (id) => {
     params: { id }
   })
 }
+
+// 用户催单
+export const ordersReminder = (storeId, ordersNumber) => {
+  return request({
+    url: '/api/user/reminder',
+    method: 'post',
+    data: { storeId, ordersNumber }
+  })
+}

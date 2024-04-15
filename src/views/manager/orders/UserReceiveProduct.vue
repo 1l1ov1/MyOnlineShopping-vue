@@ -12,13 +12,14 @@ const params = ref({
   goodsName: '', // 商品名
   coverPic: '',
   status: 4, // 订单状态
+  ordersNumber: undefined, // 订单号
   store: {
     storeName: ''
   }, // 商店
   address: {}, // 用户接收地址
   username: '', // 用户名
   phone: '', // 购买者电话
-  sort: 1
+  sort: 0
 })
 // 请求加载
 const loading = ref(false)
@@ -65,6 +66,7 @@ const onReset = () => {
   params.value.username = ''
   params.value.status = ''
   params.value.store.storeName = ''
+  params.value.ordersNumber = undefined
   getOrdersList()
   ElMessage({
     message: h('p', { style: 'line-height: 1; font-size: 14px' }, [
@@ -200,6 +202,9 @@ onMounted(() => {
       <el-form-item label="商店名">
         <el-input v-model="params.store.storeName" placeholder="请输入商店名" />
       </el-form-item>
+      <el-form-item label="订单号">
+        <el-input v-model="params.ordersNumber" placeholder="请输入订单号" />
+      </el-form-item>
       <el-form-item>
         <el-button @click="onSearch" type="primary">搜索</el-button>
         <el-button @click="onReset">重置</el-button>
@@ -213,7 +218,7 @@ onMounted(() => {
       <!-- <el-table-column sortable="true" label="序号" width="180" type="index" :index="indexMethod" /> -->
       <el-table-column label="序号" prop="serialNumber" sortable="custom" width="90" align="center">
       </el-table-column>
-      <el-table-column prop="id" label="ID" width="180" v-if="false" />
+      <el-table-column prop="ordersNumber" label="订单号" width="170" align="center" />
       <el-table-column prop="username" label="买家账号" width="150" align="center" />
       <el-table-column prop="phone" label="买家电话" align="center" />
       <el-table-column prop="goodsName" label="商品名" align="center"></el-table-column>

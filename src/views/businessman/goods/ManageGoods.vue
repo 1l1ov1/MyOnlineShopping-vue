@@ -33,7 +33,7 @@ const params = ref({
     storeName: '',
     userId: userStoreInstance.user.store === null ? undefined : userStoreInstance.user.store.userId
   }, // 商店
-  sort: 1
+  sort: 0
 })
 
 // 请求加载

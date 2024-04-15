@@ -29,7 +29,7 @@ const params = ref({
   username: '', // 账号
   storeName: '',
   status: undefined, // 商店状态
-  sort: 1
+  sort: 0
 })
 
 const updateRef = ref({})

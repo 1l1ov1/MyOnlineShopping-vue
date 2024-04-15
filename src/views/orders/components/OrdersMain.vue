@@ -1,9 +1,13 @@
 <script setup>
-import { watch, ref } from 'vue'
+import { watch, ref, onMounted } from 'vue'
 import router from '@/router'
 import { ElMessageBox, ElMessage } from 'element-plus'
-import { applyRefundService } from '@/api/user'
+import { applyRefundService, ordersReminder } from '@/api/user'
 // import { Delete } from '@element-plus/icons-vue'
+import { ordersConstant } from '@/constant/constants'
+import { userStore } from '@/store'
+const userStoreInstance = userStore()
+
 const props = defineProps({
   ordersList: Array
 })
@@ -51,7 +55,44 @@ const applyRefund = (id) => {
       })
     })
 }
+// 用户催单
+const reminder = ref({
+  clickedTimer: {},
+  isClicked: {}
+})
+const handleReminder = async (ordersId, storeId, ordersNumber) => {
+  // 设置时间
+  reminder.value.clickedTimer[ordersId] = new Date().getTime()
+  // 设置禁止
+  reminder.value.isClicked[ordersId] = true
+  userStoreInstance.setReminder(reminder.value)
+  const res = await ordersReminder(storeId, ordersNumber)
+  if (res.code === 1) {
+    ElMessage.success(res.msg)
+  }
+}
+
 const emit = defineEmits(['updateOrdersList'])
+
+/**
+ * 检查并更新所有已点击计时器的状态。
+ * 根据点击时间与当前时间的差距，确定计时器是否仍然处于被点击状态。
+ */
+const findClickReminder = (r) => {
+  // 遍历所有已点击的计时器，更新它们的当前状态
+  Object.entries(r.clickedTimer).forEach(([orderId, clickedTime]) => {
+    // 如果点击时间超过24小时，则将计时器状态设为未点击；否则保持点击状态
+    if (new Date().getTime() - clickedTime > 1000 * 60 * 60 * 24) {
+      reminder.value.isClicked[orderId] = false
+    } else {
+      reminder.value.isClicked[orderId] = true
+    }
+  })
+}
+onMounted(() => {
+  // 查询用户的订单催单
+  findClickReminder(userStoreInstance.reminder)
+})
 </script>
 
 <template>
@@ -77,7 +118,7 @@ const emit = defineEmits(['updateOrdersList'])
                 </span>
                 <span class="bought-wrapper-mod__create-time___yNWVS">{{ item.createTime
                   }}</span></label><span><span>订单号</span><span>:
-                </span><span>{{ item.id }}</span></span>
+                </span><span>{{ item.ordersNumber }}</span></span>
             </td>
             <td colspan="2" class="bought-wrapper-mod__seller-container___3dAK3"><span
                 class="seller-mod__container___zFAFV"><img
@@ -170,8 +211,11 @@ const emit = defineEmits(['updateOrdersList'])
             </td>
             <td class="">
               <div>
-                <p style="margin-bottom:3px;"><span class="text-mod__link___1rXmw">{{ item.status === 1 ?
-    '待发货' : item.status === 2 ? '已发货' : item.status === 3 ? '已退款' : '交易成功' }}</span>
+                <p style="margin-bottom:3px;"><span class="text-mod__link___1rXmw">{{ ordersConstant.getOrdersStatusLabel(item.status) }}</span>
+                </p>
+                <p style="margin-bottom:3px; margin-top: 20px;"><span class="text-mod__link___1rXmw"  :title="催单"><el-link
+                  href="javascript:void(0)" style="font-size: 1.1em;" :disabled="reminder.isClicked[item.id]"
+                  @click="handleReminder(item.id, item.store.id,item.ordersNumber)">催 单</el-link></span>
                 </p>
                 <div>
                   <!-- <p style="margin-bottom:3px;"><a

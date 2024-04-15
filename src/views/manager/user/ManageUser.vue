@@ -31,7 +31,7 @@ const params = ref({
   isOnline: undefined,
   address: {}, // 地址
   addressList: [], // 地址
-  sort: 1 // 排序规则
+  sort: 0 // 排序规则
 })
 
 const updateRef = ref({})

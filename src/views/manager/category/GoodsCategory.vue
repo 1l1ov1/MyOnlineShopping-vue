@@ -11,7 +11,7 @@ const params = ref({
   id: undefined,
   categoryName: '',
   categoryStatus: undefined,
-  sort: 1
+   sort: 0
 })
 const categoryList = ref([])
 const loading = ref(false)

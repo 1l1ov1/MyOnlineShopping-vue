@@ -111,7 +111,6 @@ const beforeAvatarUpload = (UploadRawFile) => {
 }
 // 回车确定
 const keyDown = (e) => {
-  console.log(e)
   // 如果按键是回车
   if (e.keyCode === 13) {
     // 提交
