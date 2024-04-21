@@ -8,6 +8,9 @@ export const getCategoryListService = (params) =>
 export const updateCategoryService = (params) =>
   request.put('/api/category/update', params)
 
+// 修改分类状态
+export const updateCategoryStatusService = (params) =>
+  request.put('/api/category/updateStatus', params)
 // 批量删除
 export const batchDeleteCategoryService = (ids) => {
   return request({

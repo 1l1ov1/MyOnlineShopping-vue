@@ -1,8 +1,11 @@
 const { defineConfig } = require('@vue/cli-service')
 module.exports = defineConfig({
   transpileDependencies: true,
+
   devServer: {
     port: 7070,
+    // 允许所有主机名访问
+    allowedHosts: 'all',
     /* 解读为加链接头，开启跨域，加/api作为识别。
 意为请求/api下的链接，直接回转到target */
     proxy: {

@@ -76,3 +76,12 @@ export const getGoodsListService = (params) => {
     data: params
   })
 }
+
+// 封禁或禁言用户
+export const forbidOrBanUserService = (params) => {
+  return request({
+    url: '/api/manager/forbidOrBan',
+    method: 'post',
+    data: params
+  })
+}

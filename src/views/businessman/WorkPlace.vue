@@ -16,6 +16,8 @@ import { userStore } from '@/store/index.js'
 import { onMounted, ref } from 'vue'
 import { userLogoutService } from '@/api/user.js'
 import { useRouter } from 'vue-router'
+import { BASE_URL } from '@/constant/baseUrl.js'
+import { websocketTypeConstant } from '@/constant/constants.js'
 const userStoreInstance = userStore()
 const router = useRouter()
 onMounted(() => {
@@ -59,7 +61,7 @@ const enableClick = ref(false)
 const open = ref(false)
 // 当商家进入后台，就开始进行socket连接
 const Websocket = () => {
-  const wsUrl = 'ws://localhost:7070/api/ws/' + userStoreInstance.user.store.id
+  const wsUrl = `ws://${BASE_URL}/api/ws/store/` + userStoreInstance.user.store.id
   let socket
 
   // 如果浏览器支持，创建 WebSocket 连接
@@ -96,7 +98,7 @@ const Websocket = () => {
     }
     // 显示数据
     ElNotification.success({
-      title: jsonMsg.type === 1 ? '订单通知' : '催单通知',
+      title: websocketTypeConstant.getWebSocketTypeLabel(jsonMsg.type),
       dangerouslyUseHTMLString: true,
       message: `${
             jsonMsg.type === 1

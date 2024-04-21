@@ -442,6 +442,229 @@ class AddressConstants {
 }
 
 const addressConstant = new AddressConstants()
+
+// 禁言时间
+const FORBIDDEN_WORD_TIME = {
+  HALF_HOUR: {
+    value: 0.5,
+    label: '半小时'
+  },
+  ONE_HOUR: {
+    value: 1.0,
+    label: '一小时'
+  },
+  TWO_HOURS: {
+    value: 2.0,
+    label: '两小时'
+  },
+  THREE_HOURS: {
+    value: 3.0,
+    label: '三小时'
+  },
+  FOUR_HOURS: {
+    value: 4.0,
+    label: '四小时'
+  },
+  FIVE_HOURS: {
+    value: 5.0,
+    label: '五小时'
+  },
+  SIX_HOURS: {
+    value: 6.0,
+    label: '六小时'
+  },
+  SEVEN_HOURS: {
+    value: 7.0,
+    label: '七小时'
+  },
+  EIGHT_HOURS: {
+    value: 8.0,
+    label: '八小时'
+  },
+  NINE_HOURS: {
+    value: 9.0,
+    label: '九小时'
+  },
+  TEN_HOURS: {
+    value: 10.0,
+    label: '十小时'
+  },
+  TWELVE_HOURS: {
+    value: 12.0,
+    label: '十二小时'
+  },
+  ONE_DAY: {
+    value: 24.0,
+    label: '一天'
+  },
+  THREE_DAYS: {
+    value: 72.0,
+    label: '三天'
+  },
+  ONE_WEEK: {
+    value: 168.0,
+    label: '一周'
+  },
+  TWO_WEEKS: {
+    value: 336.0,
+    label: '两周'
+  },
+  ONE_MONTH: {
+    value: 720.0,
+    label: '一个月'
+  },
+  ONE_YEAR: {
+    value: 8760.0,
+    label: '一年'
+  },
+  FOREVER: {
+    value: -1,
+    label: '永久'
+  }
+}
+// 封禁时间
+const BAN_TIME = {
+  HALF_HOUR: {
+    value: 0.5,
+    label: '半小时'
+  },
+  ONE_HOUR: {
+    value: 1.0,
+    label: '一小时'
+  },
+  TWO_HOURS: {
+    value: 2.0,
+    label: '两小时'
+  },
+  THREE_HOURS: {
+    value: 3.0,
+    label: '三小时'
+  },
+  FOUR_HOURS: {
+    value: 4.0,
+    label: '四小时'
+  },
+  FIVE_HOURS: {
+    value: 5.0,
+    label: '五小时'
+  },
+  SIX_HOURS: {
+    value: 6.0,
+    label: '六小时'
+  },
+  SEVEN_HOURS: {
+    value: 7.0,
+    label: '七小时'
+  },
+  EIGHT_HOURS: {
+    value: 8.0,
+    label: '八小时'
+  },
+  NINE_HOURS: {
+    value: 9.0,
+    label: '九小时'
+  },
+  TEN_HOURS: {
+    value: 10.0,
+    label: '十小时'
+  },
+  TWELVE_HOURS: {
+    value: 12.0,
+    label: '十二小时'
+  },
+  ONE_DAY: {
+    value: 24.0,
+    label: '一天'
+  },
+  THREE_DAYS: {
+    value: 72.0,
+    label: '三天'
+  },
+  ONE_WEEK: {
+    value: 168.0,
+    label: '一周'
+  },
+  TWO_WEEKS: {
+    value: 336.0,
+    label: '两周'
+  },
+  ONE_MONTH: {
+    value: 720.0,
+    label: '一个月'
+  },
+  ONE_YEAR: {
+    value: 8760.0,
+    label: '一年'
+  },
+  FOREVER: {
+    value: -1.0,
+    label: '永久'
+  }
+}
+class ForbiddenWordOrBanConstants {
+  constructor () {
+    this.forbiddenWordTime = FORBIDDEN_WORD_TIME
+    this.banTime = BAN_TIME
+  }
+
+  getForbiddenWordTimeLabel (value) {
+    // 检查forbiddenWordTime是否为有效对象，增强代码健壮性
+    if (!this.forbiddenWordTime || typeof this.forbiddenWordTime !== 'object' || Object.keys(this.forbiddenWordTime).length === 0) {
+      throw new Error('禁言时间不是一个合法参数')
+    }
+
+    // 使用Object.values和find方法来查找匹配的状态
+    const matchingStatus = Object.values(this.forbiddenWordTime).find(time => time.value === value)
+    return matchingStatus?.label ?? null
+  }
+
+  getBanTimeLabel (value) {
+    // 检查banTime是否为有效对象，增强代码健壮性
+    if (!this.banTime || typeof this.banTime !== 'object' || Object.keys(this.banTime).length === 0) {
+      throw new Error('封禁时间不是一个合法参数')
+    }
+
+    // 使用Object.values和find方法来查找匹配的状态
+    const matchingStatus = Object.values(this.banTime).find(time => time.value === value)
+    return matchingStatus?.label ?? null
+  }
+}
+
+const forbiddenWordOrBanConstant = new ForbiddenWordOrBanConstants()
+
+const WEBSOCKET_TYPE = {
+  REMIND_ORDER: {
+    value: 1,
+    label: '提醒订单'
+  },
+  USER_URGE_ORDER: {
+    value: 2,
+    label: '用户催单'
+  },
+  USER_EXIT: {
+    value: 3,
+    label: '账号被封禁'
+  }
+}
+
+class WebSocketTypeConstants {
+  constructor () {
+    this.websocketType = WEBSOCKET_TYPE
+  }
+
+  getWebSocketTypeLabel (value) {
+    // 检查websocketType是否为有效对象，增强代码健壮性
+    if (!this.websocketType || typeof this.websocketType !== 'object' || Object.keys(this.websocketType).length === 0) {
+      throw new Error('WEBSOCKET_TYPE is not a valid object.')
+    }
+
+    // 使用Object.values和find方法来查找匹配的状态
+    const matchingStatus = Object.values(this.websocketType).find(type => type.value === value)
+    return matchingStatus?.label ?? null
+  }
+}
+
+const websocketTypeConstant = new WebSocketTypeConstants()
 export {
   userConstant,
   storeConstant,
@@ -449,5 +672,7 @@ export {
   goodsConstant,
   applyConstant,
   passwordConstant,
-  addressConstant
+  addressConstant,
+  forbiddenWordOrBanConstant,
+  websocketTypeConstant
 }

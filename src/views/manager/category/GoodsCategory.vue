@@ -2,7 +2,10 @@
 import pageContainer from '@/components/PageContainer.vue'
 import { Edit, Delete } from '@element-plus/icons-vue'
 import { ref, onMounted } from 'vue'
-import { getCategoryListService, updateCategoryService, batchDeleteCategoryService } from '@/api/category'
+import {
+  getCategoryListService, /* updateCategoryService, */
+  batchDeleteCategoryService, updateCategoryStatusService
+} from '@/api/category'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import AddOrEditCategory from './components/AddOrEditCategory.vue'
 const params = ref({
@@ -11,7 +14,7 @@ const params = ref({
   id: undefined,
   categoryName: '',
   categoryStatus: undefined,
-   sort: 0
+  sort: 0
 })
 const categoryList = ref([])
 const loading = ref(false)
@@ -59,7 +62,7 @@ const onReset = () => {
 const updateRef = ref()
 // 修改分类状态
 const changeCategoryStatus = (row) => {
-  updateRef.value = { id: row.id, categoryStatus: row.categoryStatus, categoryName: '' }
+  updateRef.value = { id: row.id, categoryStatus: row.categoryStatus }
   const msg = row.categoryStatus === 0 ? '启用' : '禁用'
   ElMessageBox.confirm(
     '确认是否修改编号' + row.id + '：' + row.categoryName + '的分类状态为' + msg,
@@ -72,7 +75,7 @@ const changeCategoryStatus = (row) => {
   ).then(async () => {
     updateRef.value.categoryStatus = updateRef.value.categoryStatus === 0 ? 1 : 0
     // 确认的函数
-    await updateCategoryService(updateRef.value)
+    await updateCategoryStatusService(updateRef.value)
     ElMessage.success('修改成功')
     getCategoryList()
   })

@@ -156,6 +156,10 @@ const routes = [
       {
         path: '/managerBack/apply/review_rejection',
         component: () => import('../views/manager/apply/reviewReject.vue')
+      },
+      {
+        path: '/managerBack/report/comment-report',
+        component: () => import('../views/manager/report/CommentReport.vue')
       }
     ]
   },

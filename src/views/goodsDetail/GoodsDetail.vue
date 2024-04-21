@@ -9,6 +9,7 @@ import router from '@/router'
 import { GetGoodsDetailService } from '@/api/goods'
 import GoodsImage from './components/GoodsImage.vue'
 import GoodsItem from './components/GoodsItem.vue'
+import Comment from './components/CommentIndex.vue'
 const route = useRoute()
 const searchContent = ref('')
 // const offset = ref(document.body.clientHeight / 2)
@@ -45,7 +46,7 @@ onMounted(() => {
 </script>
 
 <template>
-      <NavigationComponent ></NavigationComponent>
+    <NavigationComponent></NavigationComponent>
     <div class="goods-page">
         <div class="search-header-root">
             <div class="search-header-content">
@@ -54,8 +55,8 @@ onMounted(() => {
                         <el-form :inline="true" :model="inputValue" class="demo-form-inline">
                             <el-form-item size="large">
                                 <div class="search-suggest-combobox">
-                                    <el-input class="search-header-input" @keyup.enter="handleEnterPress" v-model="searchContent" placeholder="搜索宝贝"
-                                        :prefix-icon="Search" />
+                                    <el-input class="search-header-input" @keyup.enter="handleEnterPress"
+                                        v-model="searchContent" placeholder="搜索宝贝" :prefix-icon="Search" />
                                 </div>
                             </el-form-item>
                         </el-form>
@@ -72,29 +73,34 @@ onMounted(() => {
                 </div>
             </div>
         </div>
+        <!-- 右侧工具栏 -->
         <div class="toolkit">
             <el-affix position="bottom" :offset="-100" class="affix">
                 <el-link class="cart aside-desc">
                     <div class="cart" @click="() => router.push('/myCart')">
                         <div class="img-desc"> <svg t="1710745460510" class="icon" viewBox="0 0 1024 1024" version="1.1"
-                            xmlns="http://www.w3.org/2000/svg" p-id="2863">
-                            <path d="M246.4 912a2.1 2.1 0 1 0 134.4 0 2.1 2.1 0 1 0-134.4 0Z" p-id="2864"></path>
-                            <path d="M716.8 912a2.1 2.1 0 1 0 134.4 0 2.1 2.1 0 1 0-134.4 0Z" p-id="2865"></path>
-                            <path
-                                d="M905.6 764.8l-537.6 0c-28.8 0-57.6-25.6-64-54.4l-96-566.4c-9.6-54.4-60.8-96-115.2-96l-22.4 0c-12.8 0-25.6 12.8-25.6 25.6 0 12.8 12.8 25.6 25.6 25.6l22.4 0c28.8 0 57.6 25.6 64 54.4l96 566.4c9.6 54.4 60.8 96 115.2 96l537.6 0c12.8 0 25.6-12.8 25.6-25.6C931.2 777.6 921.6 764.8 905.6 764.8z"
-                                p-id="2866"></path>
-                            <path
-                                d="M880 179.2l-572.8 0c-12.8 0-25.6 12.8-25.6 25.6 0 12.8 12.8 25.6 25.6 25.6l572.8 0c25.6 0 38.4 16 32 41.6l-70.4 281.6c-6.4 32-41.6 57.6-73.6 60.8l-396.8 28.8c-12.8 0-25.6 12.8-22.4 28.8 0 12.8 12.8 25.6 28.8 22.4l396.8-28.8c54.4-3.2 105.6-48 118.4-99.2l70.4-281.6C976 230.4 937.6 179.2 880 179.2z"
-                                p-id="2867"></path>
-                        </svg>
-                    </div>
-                    <div class="descWrap"> <span class="desc">购物车</span></div>
+                                xmlns="http://www.w3.org/2000/svg" p-id="2863">
+                                <path d="M246.4 912a2.1 2.1 0 1 0 134.4 0 2.1 2.1 0 1 0-134.4 0Z" p-id="2864"></path>
+                                <path d="M716.8 912a2.1 2.1 0 1 0 134.4 0 2.1 2.1 0 1 0-134.4 0Z" p-id="2865"></path>
+                                <path
+                                    d="M905.6 764.8l-537.6 0c-28.8 0-57.6-25.6-64-54.4l-96-566.4c-9.6-54.4-60.8-96-115.2-96l-22.4 0c-12.8 0-25.6 12.8-25.6 25.6 0 12.8 12.8 25.6 25.6 25.6l22.4 0c28.8 0 57.6 25.6 64 54.4l96 566.4c9.6 54.4 60.8 96 115.2 96l537.6 0c12.8 0 25.6-12.8 25.6-25.6C931.2 777.6 921.6 764.8 905.6 764.8z"
+                                    p-id="2866"></path>
+                                <path
+                                    d="M880 179.2l-572.8 0c-12.8 0-25.6 12.8-25.6 25.6 0 12.8 12.8 25.6 25.6 25.6l572.8 0c25.6 0 38.4 16 32 41.6l-70.4 281.6c-6.4 32-41.6 57.6-73.6 60.8l-396.8 28.8c-12.8 0-25.6 12.8-22.4 28.8 0 12.8 12.8 25.6 28.8 22.4l396.8-28.8c54.4-3.2 105.6-48 118.4-99.2l70.4-281.6C976 230.4 937.6 179.2 880 179.2z"
+                                    p-id="2867"></path>
+                            </svg>
+                        </div>
+                        <div class="descWrap"> <span class="desc">购物车</span></div>
                     </div>
                 </el-link>
             </el-affix>
         </div>
+        <div class="comment-root">
+        <Comment :store="store" :goods="goods"/>
     </div>
-     <el-backtop :right="100" :bottom="100" />
+    </div>
+
+    <el-backtop :right="100" :bottom="100" />
     <FooterComponent></FooterComponent>
 </template>
 
@@ -118,9 +124,11 @@ onMounted(() => {
 .Item--content {
     position: relative;
     background-color: #fff;
-    margin: 12px auto 40px;
+    margin: 12px auto 0px;
     width: 1192px;
-    border-radius: 24px;
+    /* border-radius: 24px; */
+    border-top-left-radius: 24px;
+    border-top-right-radius: 24px;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
@@ -133,7 +141,19 @@ onMounted(() => {
     margin-left: 21px;
     width: 694px;
 }
-
+.comment-root {
+    position: relative;
+    background-color: #fff;
+    margin: 0px auto 0px;
+    width: 1192px;
+  /*   border-radius: 24px; */
+    border-bottom-left-radius: 24px;
+    border-bottom-right-radius: 24px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 12px 0;
+}
 .toolkit {
     position: fixed;
     right: 5px;
@@ -151,6 +171,7 @@ onMounted(() => {
     border-radius: 18px 0 0 18px;
     width: 100px;
 }
+
 /deep/.aside-desc {
     width: 100%;
     display: block;
