@@ -13,7 +13,7 @@ const open = (value, goodsId, storeId, parentCommentId) => {
   params.value.avatar = (value.avatar === null ||
   value.avatar === undefined ||
   value.avatar === '')
-    ? '@/assets/avatar.jpg'
+    ? 'default.png'
     : value.avatar
 
   params.value.goodsId = goodsId

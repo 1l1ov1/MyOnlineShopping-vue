@@ -172,7 +172,7 @@ onMounted(() => {
     width: 100px;
 }
 
-/deep/.aside-desc {
+::v-deep(.aside-desc) {
     width: 100%;
     display: block;
     font-size: 12px;
@@ -180,12 +180,12 @@ onMounted(() => {
     text-decoration: none;
 }
 
-/deep/.el-link__inner,
+::v-deep(.el-link__inner),
 .img-desc {
     width: 100%;
 }
 
-/deep/.affix {
+::v-deep(.affix) {
     margin-bottom: 3px;
 }
 

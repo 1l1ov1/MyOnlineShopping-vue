@@ -896,7 +896,7 @@ img {
   width: 77px
 }
 
-/deep/.el-input-number--small {
+::v-deep(.el-input-number--small) {
   width: 100%;
 }
 

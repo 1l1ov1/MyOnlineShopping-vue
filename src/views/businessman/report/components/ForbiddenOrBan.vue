@@ -20,7 +20,6 @@ const open = async (row, type) => {
     params.value.reportId = row.id
     params.value.reportedUsername = row.reportedUsername
     params.value.reportedUserId = row.reportedUserId
-    params.value.userId = row.userId
     emit('dialog')
   } else if (type === '禁言') {
     // 说明是用户管理的禁言

@@ -17,3 +17,12 @@ export const getReportListService = (params) => {
     data: params
   })
 }
+
+// 批量删除举报
+export const deleteReportService = (ids) => {
+  return request({
+    url: '/api/report/delete',
+    method: 'delete',
+    params: { ids }
+  })
+}

@@ -10,7 +10,7 @@ import {
   PieChart
 } from '@element-plus/icons-vue'
 import { ElMessageBox } from 'element-plus'
-import avatar from '@/assets/default.png'
+
 import { userStore } from '@/store/index.js'
 import { onMounted, ref } from 'vue'
 import { userLogoutService } from '@/api/user.js'
@@ -230,8 +230,7 @@ const open = ref(false)
                 <el-dropdown placement="bottom-end" @command="onCommand">
                     <!-- 展示给用户，默认看到的 -->
                     <span class="el-dropdown__box">
-                        <el-avatar :src="(userStoreInstance.user.avatar !== '' && userStoreInstance.user.avatar !== null && userStoreInstance.user.avatar !== undefined) ?
-                require('../../assets/uploadAvatar/' + userStoreInstance.user.avatar) : avatar" />
+                        <el-avatar :src="require('@/assets/uploadAvatar/' + userStoreInstance.user.avatar)" />
                         <el-icon>
                             <CaretBottom />
                         </el-icon>

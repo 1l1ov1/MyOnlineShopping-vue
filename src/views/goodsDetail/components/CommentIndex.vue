@@ -31,7 +31,10 @@ watch(
   }
 )
 
-const params = ref({})
+const params = ref({
+  type: 0,
+  sort: 1
+})
 const commentSort = ref(1)
 // 下拉框排序改变
 const handleSortChange = (value) => {
@@ -48,6 +51,9 @@ const queryComments = async (params) => {
   total.value = res.data.total
   commentsList.value = res.data.comments
   console.log(commentsList.value)
+  if (commentsList.value == null) {
+    return
+  }
   // 创建一个新数组，仅包含父评论（parentCommentId为null或undefined）
   const parentComments = commentsList.value.filter(
     (comment) => !comment.parentCommentId
@@ -230,15 +236,12 @@ const handleReport = (commentId) => {
                 </el-select>
               </div>
             </div>
-            <div class="comment-comments">
+            <div class="comment-comments" v-if="commentsList !== null && commentsList !== undefined && commentsList.length > 0">
               <div v-for="item in commentsList" :key="item.id">
                 <div class="comment-root">
                   <div class="comment-header">
                     <div class="comment-avatar">
-                      <img :src="(item.avatar !== null
-                  && item.avatar !== undefined) ?
-                  require('@/assets/uploadAvatar/' + item.avatar) :
-                  require('@/assets/avatar.jpg')" />
+                      <img :src="require('@/assets/uploadAvatar/' + item.avatar)" />
                     </div>
                     <div class="comment-userInfo">
                       <div class="username">
@@ -301,7 +304,7 @@ const handleReport = (commentId) => {
                       </div>
                       <!-- 举报 -->
                       <div class="comment-reply-report">
-                        <el-button @click="handleReport(item.id)">
+                        <el-button @click="handleReport(subComment.id)">
                           <svg t="1713537420374" class="icon" viewBox="0 0 1024 1024" version="1.1"
                             xmlns="http://www.w3.org/2000/svg" p-id="2717" width="12" height="12">
                             <path

@@ -411,8 +411,8 @@ defineExpose({
 }
 
 /* 在对element-ui修改组件样式时，需要添加样式穿透（/deep/或>>>）才能生效 */
-/deep/.el-upload.is-drag,
-/deep/.el-upload-dragger {
+::v-deep(.el-upload.is-drag),
+::v-deep(.el-upload-dragger) {
   height: 100%;
 }
 

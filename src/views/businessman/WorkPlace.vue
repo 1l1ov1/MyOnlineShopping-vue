@@ -11,7 +11,6 @@ import {
   Box
 } from '@element-plus/icons-vue'
 import { ElMessageBox, ElNotification } from 'element-plus'
-import avatar from '@/assets/default.png'
 import { userStore } from '@/store/index.js'
 import { onMounted, ref } from 'vue'
 import { userLogoutService } from '@/api/user.js'
@@ -201,6 +200,26 @@ onMounted(() => {
                         交易完成订单
                     </el-menu-item>
                 </el-sub-menu>
+                <el-menu-item index="/businessBack/report/comment-report">
+                    <svg t="1713537420374" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                            xmlns="http://www.w3.org/2000/svg" p-id="2717" width="20" height="20">
+                            <path
+                              d="M924.8 908H284v-32h640.8c8 0 15.2-4 20-11.2 4-7.2 4-15.2 0-22.4L532 128c-4-7.2-11.2-11.2-20-11.2-8 0-15.2 4-20 11.2l-320 555.2-28-16L464.8 112c9.6-16.8 27.2-27.2 47.2-27.2 20 0 37.6 10.4 47.2 27.2l412.8 714.4c9.6 16.8 9.6 37.6 0 54.4-9.6 17.6-27.2 27.2-47.2 27.2z"
+                              fill="#666666" p-id="2718"></path>
+                            <path d="M517.6 737.6m-32 0a32 32 0 1 0 64 0 32 32 0 1 0-64 0Z" fill="#666666" p-id="2719">
+                            </path>
+                            <path
+                              d="M517.6 672c-17.6 0-32-14.4-32-32V416c0-17.6 14.4-32 32-32s32 14.4 32 32v224c0 17.6-14.4 32-32 32z"
+                              fill="#666666" p-id="2720"></path>
+                            <path d="M158.4 675.2m-16 0a16 16 0 1 0 32 0 16 16 0 1 0-32 0Z" fill="#666666" p-id="2721">
+                            </path>
+                            <path d="M284 892m-16 0a16 16 0 1 0 32 0 16 16 0 1 0-32 0Z" fill="#666666" p-id="2722">
+                            </path>
+                            <path d="M208 892m-16 0a16 16 0 1 0 32 0 16 16 0 1 0-32 0Z" fill="#666666" p-id="2723">
+                            </path>
+                    </svg>
+                    <span>&nbsp;评论举报管理</span>
+                </el-menu-item>
                 <el-sub-menu index="/businessBack/person" id="business-person-info-item">
                     <!-- 多级菜单的标题 - 具名插槽 title-->
 
@@ -236,8 +255,7 @@ onMounted(() => {
                 <el-dropdown placement="bottom-end" @command="onCommand">
                     <!-- 展示给用户，默认看到的 -->
                     <span class="el-dropdown__box">
-                        <el-avatar :src="(userStoreInstance.user.avatar !== '' && userStoreInstance.user.avatar !== null && userStoreInstance.user.avatar !== undefined) ?
-                require('../../assets/uploadAvatar/' + userStoreInstance.user.avatar) : avatar" />
+                        <el-avatar :src=" require('@/assets/uploadAvatar/' + userStoreInstance.user.avatar)" />
                         <el-icon>
                             <CaretBottom />
                         </el-icon>

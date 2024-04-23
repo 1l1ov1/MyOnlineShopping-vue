@@ -141,7 +141,7 @@ const findFavorite = async () => {
 </template>
 
 <style lang="less" scoped>
-/deep/.collectionButton {
+::v-deep(.collectionButton) {
     width: 100%;
     border-radius: 40px;
     height: 100%

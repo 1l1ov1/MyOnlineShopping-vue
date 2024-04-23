@@ -209,6 +209,10 @@ const routes = [
         component: () => import('../views/businessman/orders/SuccessfulOrders')
       },
       {
+        path: '/businessBack/report/comment-report',
+        component: () => import('../views/businessman/report/CommentReport')
+      },
+      {
         path: '/businessBack/person/profile',
         component: () => import('../views/businessman/user/UserProfile.vue')
       },

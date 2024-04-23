@@ -644,6 +644,14 @@ const WEBSOCKET_TYPE = {
   USER_EXIT: {
     value: 3,
     label: '账号被封禁'
+  },
+  USER_START: {
+    value: 4,
+    label: '账号被解封'
+  },
+  USER_AWARD: {
+    value: 5,
+    label: '用户奖励'
   }
 }
 
@@ -665,6 +673,81 @@ class WebSocketTypeConstants {
 }
 
 const websocketTypeConstant = new WebSocketTypeConstants()
+// 举报状态
+const REPORT_STATUS = {
+  PENDING: {
+    value: 1,
+    label: '待处理'
+  },
+  PROCESSED: {
+    value: 2,
+    label: '已处理'
+  }
+}
+class ReportStatusConstants {
+  constructor () {
+    this.reportStatus = REPORT_STATUS
+  }
+
+  getReportStatusLabel (value) {
+    // 检查reportStatus是否为有效对象，增强代码健壮性
+    if (!this.reportStatus || typeof this.reportStatus !== 'object' || Object.keys(this.reportStatus).length === 0) {
+      throw new Error('REPORT_STATUS is not a valid object.')
+    }
+
+    // 使用Object.values和find方法来查找匹配的状态
+    const matchingStatus = Object.values(this.reportStatus).find(status => status.value === value)
+    return matchingStatus?.label ?? null
+  }
+}
+
+const reportStatusConstant = new ReportStatusConstants()
+
+// 奖励金额
+const REWARD_ACCOUNTS = {
+  TEN: { value: 10, label: '10元' },
+  TWENTY_FIVE: { value: 25, label: '25元' },
+  FIFTY: { value: 50, label: '50元' },
+  ONE_HUNDRED: { value: 100, label: '100元' },
+  TWO_HUNDRED: { value: 200, label: '200元' },
+  THREE_HUNDRED: { value: 300, label: '300元' },
+  FOUR_HUNDRED: { value: 400, label: '400元' },
+  FIVE_HUNDRED: { value: 500, label: '500元' },
+  SEVEN_HUNDRED: { value: 700, label: '700元' },
+  ONE_THOUSAND: { value: 1000, label: '1000元' },
+  FIFTEEN_HUNDRED: { value: 1500, label: '1500元' },
+  TWO_THOUSAND: { value: 2000, label: '2000元' },
+  THREE_THOUSAND: { value: 3000, label: '3000元' },
+  FOUR_THOUSAND: { value: 4000, label: '4000元' },
+  FIVE_THOUSAND: { value: 5000, label: '5000元' },
+  SEVEN_THOUSAND: { value: 7000, label: '7000元' },
+  TEN_THOUSAND: { value: 10000, label: '10000元' },
+  FIFTEEN_THOUSAND: { value: 15000, label: '15000元' },
+  TWENTY_THOUSAND: { value: 20000, label: '20000元' },
+  THIRTY_THOUSAND: { value: 30000, label: '30000元' },
+  FORTY_THOUSAND: { value: 40000, label: '40000元' },
+  FIFTY_THOUSAND: { value: 50000, label: '50000元' }
+}
+
+class AwardAccountConstant {
+  constructor () {
+    this.awardAccount = REWARD_ACCOUNTS
+  }
+
+  getAwardAccountLabel (value) {
+    // 检查reportStatus是否为有效对象，增强代码健壮性
+    if (!this.awardAccount || typeof this.awardAccount !== 'object' || Object.keys(this.awardAccount).length === 0) {
+      throw new Error('REPORT_STATUS is not a valid object.')
+    }
+
+    // 使用Object.values和find方法来查找匹配的状态
+    const matchingStatus = Object.values(this.awardAccount).find(account => account.value === value)
+    return matchingStatus?.label ?? null
+  }
+}
+
+const awardAccountConstant = new AwardAccountConstant()
+
 export {
   userConstant,
   storeConstant,
@@ -674,5 +757,7 @@ export {
   passwordConstant,
   addressConstant,
   forbiddenWordOrBanConstant,
-  websocketTypeConstant
+  websocketTypeConstant,
+  reportStatusConstant,
+  awardAccountConstant
 }

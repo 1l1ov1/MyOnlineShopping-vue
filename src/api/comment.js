@@ -33,3 +33,21 @@ export const updateCommentActionService = (params) => {
     data: params
   })
 }
+
+// 隐藏评论
+export const hiddenCommentService = (id, status) => {
+  return request({
+    url: `/api/comment/hidden/${id}`,
+    method: 'get',
+    params: { status }
+  })
+}
+
+// 批量删除评论
+export const deleteCommentService = (ids) => {
+  return request({
+    url: '/api/comment/delete',
+    method: 'delete',
+    params: { ids }
+  })
+}

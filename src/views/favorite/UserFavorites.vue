@@ -220,7 +220,7 @@ onMounted(() => {
 .el-container {
     margin: auto;
 }
-/deep/.el-tabs__item {
+::v-deep(.el-tabs__item) {
   font-size: 1.2em;
 }
 .goods-container {

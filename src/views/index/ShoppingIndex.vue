@@ -241,13 +241,13 @@ onMounted(async () => {
     position: relative;
 }
 
-/deep/#search {
+::v-deep(#search) {
     width: 80%;
 }
-/deep/.el-autocomplete {
+::v-deep(.el-autocomplete) {
     width: 100%;
 }
-/deep/.category-container {
+::v-deep(.category-container) {
     margin: 24px 0 0 24px;
     position: relative;
     font-size: 14px;
@@ -307,11 +307,11 @@ ul {
     width: 100%;
 }
 
-/deep/.el-carousel {
+::v-deep(.el-carousel) {
     width: 100%;
 }
 
-/deep/.el-carousel__container {
+::v-deep(.el-carousel__container) {
     width: 100%;
 }
 

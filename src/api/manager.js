@@ -85,3 +85,21 @@ export const forbidOrBanUserService = (params) => {
     data: params
   })
 }
+
+// 禁言或解除禁言
+export const managerUpdateForbiddenWord = (params) => {
+  return request({
+    url: '/api/manager/updateForbiddenWord',
+    method: 'post',
+    data: params
+  })
+}
+
+// 奖励金额
+export const managerAwardUserService = (params) => {
+  return request({
+    url: '/api/manager/awardUser',
+    method: 'post',
+    data: params
+  })
+}

@@ -1,11 +1,15 @@
 <script setup>
 import pageContainer from '@/components/PageContainer.vue'
 import { ref } from 'vue'
-import { getUserListService, managerStartOrStopService, managerBatchDeleteUsersService } from '@/api/manager'
+import {
+  getUserListService, managerStartOrStopService,
+  managerBatchDeleteUsersService
+} from '@/api/manager'
 import { Edit, Delete } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import UserAddOrEdit from './components/UserAddOrEdit'
 import { userConstant } from '@/constant/constants'
+import ForbiddenOrBan from '../report/components/ForbiddenOrBan.vue'
 // 根据data返回的每一行的数据判断,再修改这一行的样式
 // 如果改行是被禁用状态，就修改样式
 const tableRowStyle = (data) => {
@@ -63,7 +67,7 @@ const onSearch = () => {
 }
 // 重置
 const onReset = () => {
-  params.value.pagenum = 1
+  params.value.page = 1
   params.value.username = ''
   params.value.status = ''
   params.value.accountStatus = ''
@@ -82,11 +86,14 @@ const onSizeChange = (val) => {
   params.value.pageSize = val
   getUserList()
 }
+
 // 切换页面 current-page 改变时触发
 const onCurrentChange = (val) => {
   params.value.page = val
   getUserList()
 }
+
+// 修改账号状态
 const changeAccountStatus = (row) => {
   updateRef.value = row
   const msg = row.accountStatus === 0 ? '启用' : '禁用'
@@ -108,6 +115,14 @@ const changeAccountStatus = (row) => {
       // 失败的函数
     })
 }
+
+// 修改禁言状态
+const ForbiddenOrBanRef = ref()
+const changeForbiddenWord = (row) => {
+  const type = row.forbiddenWord === 0 ? '解除禁言' : '禁言'
+  ForbiddenOrBanRef.value.open(row, type)
+}
+
 // 单独删除
 const onDeleteUser = async (row) => {
   ElMessageBox.confirm(
@@ -294,6 +309,10 @@ const getDefaultAddress = () => {
           || row.status === userConstant.userStatus.SUPER_ADMINISTRATOR.value"
           type="primary" @click="changeAccountStatus(row)">{{
       userConstant.getAccountStatusLabel(row.accountStatus) }}</el-link>
+      &nbsp;&nbsp;
+      <el-link :underline="false" type="primary" @click="changeForbiddenWord(row)">
+        {{ row.forbiddenWord === 0 ? '解除禁言' : '禁言' }}
+      </el-link>
         </template>
       </el-table-column>
       <el-table-column label="操作">
@@ -314,6 +333,7 @@ const getDefaultAddress = () => {
       style="margin-top: 20px; justify-content: flex-end" />
 
     <UserAddOrEdit ref="openDialog" @dialog="onDialog"></UserAddOrEdit>
+    <ForbiddenOrBan ref="ForbiddenOrBanRef" @dialog="onDialog"></ForbiddenOrBan>
   </pageContainer>
 </template>
 

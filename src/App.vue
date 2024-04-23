@@ -5,6 +5,8 @@ import { ElNotification } from 'element-plus'
 import { BASE_URL } from '@/constant/baseUrl.js'
 import { websocketTypeConstant } from '@/constant/constants.js'
 import { onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
+const router = useRouter()
 const userStoreInstance = userStore()
 // 当用户进入系统，就开始进行socket连接
 const Websocket = (stopInterval) => {
@@ -43,16 +45,22 @@ const Websocket = (stopInterval) => {
     ElNotification.success({
       title: websocketTypeConstant.getWebSocketTypeLabel(jsonMsg.type),
       dangerouslyUseHTMLString: true,
-      message: `${
-              `<span style='color:#419EFF;cursor: pointer'>${jsonMsg.content}</span>`
-          }`,
+      message: `${`<span style='color:#419EFF;cursor: pointer'>${jsonMsg.content}</span>`
+        }`,
       type: 'warning'
     })
-    if (websocketTypeConstant.getWebSocketTypeLabel(jsonMsg.type) === '账号被封禁') {
+    if (websocketTypeConstant.getWebSocketTypeLabel(jsonMsg.type) === '账号被解封') {
+      // 如果是账号被解封
+
+    } else if (websocketTypeConstant.getWebSocketTypeLabel(jsonMsg.type) === '账号被封禁') {
       // 如果是账号被封禁，则删除token
       userStoreInstance.removeToken()
       // 清空用户信息
       userStoreInstance.setUser({})
+      // 然后跳转到登录页面
+      router.push('/login')
+    } else if (websocketTypeConstant.getWebSocketTypeLabel(jsonMsg.type) === '用户奖励') {
+      // 如果是用户奖励
     }
   }
 

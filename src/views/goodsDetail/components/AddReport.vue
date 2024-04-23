@@ -12,7 +12,9 @@ const open = (commentId) => {
 }
 
 const params = ref({
-  reason: ''
+  reason: '',
+  status: 1,
+  isAward: 0
 })
 const onSubmit = async () => {
   const res = await addReportService(params.value)

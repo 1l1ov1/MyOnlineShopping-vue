@@ -177,7 +177,7 @@ onMounted(() => {
               :on-success="handleAvatarSuccess" :headers="{ Authorization: userStoreInstance.token }">
               <img
                 :src="(formModel.avatar === undefined || formModel.avatar === '' || formModel.avatar === null) ?
-        ((imgUrl === '' ? require('../../../assets/avatar.jpg') : imgUrl)) : require('../../../assets/uploadAvatar/' + formModel.avatar)"
+        ((imgUrl === '' ? require('@/assets/avatar.jpg') : imgUrl)) : require('@/assets/uploadAvatar/' + formModel.avatar)"
                 class="avatar" />
               <el-icon class="el-icon--upload"><upload-filled /></el-icon>
               <div class="el-upload__text">
