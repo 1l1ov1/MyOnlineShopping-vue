@@ -45,7 +45,7 @@ const groupReportsByComment = (reports) => {
     const commentId = report.commentId
     if (!groupedReports[commentId]) {
       groupedReports[commentId] = {
-        commentId,
+        commentId: commentId,
         reportCount: 1,
         reportedUserId: report.reportedUserId,
         reportedUsername: report.reportedUsername,
@@ -80,7 +80,6 @@ const groupReportsByComment = (reports) => {
       child.sequence = index + 1
     })
   })
-  console.log(groupedReports)
   return Object.values(groupedReports)
 }
 
@@ -350,8 +349,8 @@ onMounted(() => {
       </el-table-column>
       <el-table-column prop="reportedUsername" label="被举报人" width="120" align="center">
         <template #default="{ row }">
-          <el-link @click="handleReported(row)" v-if="row.reportCount >= 10
-          && row.status === reportStatusConstant.reportStatus.PENDING" type="primary" :underline="false">{{
+          <el-link @click="handleReported(row)" v-if="row.reportCount >= 1
+          && row.status === reportStatusConstant.reportStatus.PENDING.value" type="primary" :underline="false">{{
           row.reportedUsername }}</el-link>
           <span v-else>{{ row.reportedUsername }}</span>
         </template>

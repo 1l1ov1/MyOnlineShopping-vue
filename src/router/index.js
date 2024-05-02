@@ -1,6 +1,7 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import ShoppingIndex from '../views/index/ShoppingIndex.vue'
 import { userStore } from '@/store'
+import { ElMessage } from 'element-plus'
 
 const routes = [
   {
@@ -237,10 +238,28 @@ const router = createRouter({
 // 2. false 拦回from的地址页面
 // 3. 具体路径 或 路径对象  拦截到对应的地址
 //    '/login'   { name: 'login' }
+// 白名单
+const whiteList = ['/login', '/register', '/forgetPassword']
 router.beforeEach((to) => {
-  // 如果没有token, 且访问的是非登录页且不是主页，拦截到登录，其他情况正常放行
+  // 如果没有token, 那么就只能访问登录、注册和忘记密码页面，其他的一律不允许访问
   const userStoreInstance = userStore()
-  if (!userStoreInstance.token && to.path !== '/login' && to.path !== '/' && to.path !== '/register' && to.path !== '/forgetPassword') return '/login'
+
+  if (!userStoreInstance.token) {
+    // 如果说用户在没有登录的情况下点击了去往首页的话，就要给予一个提示，然后拦截
+    if (to.path === '/') {
+      ElMessage({
+        message: '<strong>请先登录，登陆后才能前往主页</strong>',
+        type: 'warning',
+        grouping: true,
+        dangerouslyUseHTMLString: true
+      })
+      // 拦截
+      return '/login'
+    } else if (!whiteList.includes(to.path)) {
+      // 如果在白名单内就直接跳去登录
+      return '/login'
+    }
+  }
 })
 
 export default router

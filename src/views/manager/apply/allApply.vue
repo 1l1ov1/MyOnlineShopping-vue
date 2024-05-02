@@ -14,7 +14,7 @@ const params = ref({
   status: undefined,
   storeName: '',
   address: {},
-   sort: 0
+  sort: 0
 })
 // 请求加载
 const loading = ref(false)
