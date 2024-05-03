@@ -19,9 +19,7 @@ import { BASE_URL } from '@/constant/baseUrl.js'
 import { websocketTypeConstant } from '@/constant/constants.js'
 const userStoreInstance = userStore()
 const router = useRouter()
-onMounted(() => {
-  userStoreInstance.getUser()
-})
+
 const audioVo = ref()
 const audioVo2 = ref()
 const onCommand = async (command) => {
@@ -47,17 +45,23 @@ const onCommand = async (command) => {
 const GuideFinished = () => {
   userStoreInstance.firstComing = false
 }
+
+// 当关闭引导时
+const onClose = () => {
+  userStoreInstance.firstComing = false
+}
+
 // 当引导状态发生改变的时候的回调
 const onChange = (number) => {
   enableClick.value = false
-  if (number === 2) {
+  if (number === 2 || number === 17) {
     enableClick.value = true
   }
 }
 
 // 启用蒙层时，target 元素区域是否可以点击。
 const enableClick = ref(false)
-const open = ref(false)
+const open = ref(true)
 // 当商家进入后台，就开始进行socket连接
 const Websocket = () => {
   const wsUrl = `ws://${BASE_URL}/api/ws/store/` + userStoreInstance.user.store.id
@@ -120,9 +124,12 @@ const Websocket = () => {
     // 在此处执行任何清理任务或重新连接逻辑
   }
 }
-
 onMounted(() => {
+  userStoreInstance.getUser()
   Websocket()
+  if (!userStoreInstance.firstComing) {
+    open.value = false
+  }
 })
 </script>
 
@@ -166,7 +173,7 @@ onMounted(() => {
                     </el-icon>
                     <span>商品管理</span>
                 </el-menu-item>
-                <el-menu-item index="/businessBack/store" id="manage-store-item">
+                <el-menu-item index="/businessBack/store" id="business-store-item">
                    <!--  <el-icon>
                         <Promotion />
                     </el-icon> -->
@@ -279,22 +286,22 @@ onMounted(() => {
         </el-container>
     </el-container>
 
-    <el-tour v-model="open" @finish="GuideFinished" @change="onChange" :target-area-clickable="enableClick" :mask="{
-                style: {
-                    boxShadow: 'insert 0 0 15px'
-                }
-            }">
+    <el-tour v-model="open" @finish="GuideFinished"
+    @change="onChange" @close="onClose"
+    :target-area-clickable="enableClick" :mask="{
+     style: {
+           boxShadow: 'insert 0 0 15px'
+            }
+    }">
         <el-tour-step target=".el-header" title="欢迎( ＾∀＾）／欢迎＼( ＾∀＾）"
-            description="管理员您好，欢迎来到您的工作界面，接下来由我来告诉您每个工作区的功能吧(*^_^*)" />
+            description="店家您好，欢迎来到您的工作界面，接下来由我来告诉您每个工作区的功能吧(*^_^*)" />
         <el-tour-step title="拥有的功能" target=".el-menu--vertical" description="这是您可以拥有的功能，让我一一为您解答吧🤭(●'◡'●)" />
-        <el-tour-step target="#manage-user-item" title="用户管理" description="请点击它。" />
-        <el-tour-step target=".el-main" placement="left-start" title="用户管理" description="这个区域是您管理用户的账号，即查询、修改和删除的地方。" />
-        <el-tour-step target=".header" title="添加和批量删除按钮" description="这里有两个按钮，分别为添加用户按钮和批量删除用户按钮。" />
-        <el-tour-step target=".el-form--default" title="根据条件搜索用户"
+        <el-tour-step target="#business-goods-item" title="商品管理" description="这里是您管理店家商品的地方哦，请点击它" />
+        <el-tour-step target=".el-main" placement="left-start" title="商品管理" description="这个区域是您管理商品，即查询、修改和删除的地方。" />
+        <el-tour-step target=".header" title="添加和批量删除按钮" description="这里有两个按钮，分别为添加商品按钮和批量删除商品按钮。" />
+        <el-tour-step target=".el-form--default" title="根据条件搜索商品"
             description="这个部分你可以输入条件，然后点击搜索按钮进行搜索或者点击重置按钮清空搜索条件。" />
-        <el-tour-step target=".el-table" title="查询结果" type="primary" description="这个表格是分页查询后查询到的结果，
-        您可以在这里看到所有账户状态，注意当某一行账号的身份为管理员时，您无法对其账号状态进行修改。当某一行账号的账号状态为禁用的时候，
-        会用颜色标记出这一行来提示您。" />
+        <el-tour-step target=".el-table" title="查询结果" type="primary" description="这个表格是分页查询后查询到的结果。展示您商店的所有商品" />
         <el-tour-step target=".el-checkbox" title="单选框" description="当您勾选最上层的单选框时，会将这一页的所有行选中
         ，而点击其中的某一个单选框会将该行选中" />
         <el-tour-step target=".is-plain" title="修改和删除" description="这两个按钮分别为修改和删除该行账号信息" />
@@ -305,10 +312,15 @@ onMounted(() => {
         <el-tour-step target=".btn-prev" title="向前按钮" description="这是去往前面一页" />
         <el-tour-step target=".el-pager" title="页码数" description="这是所有数据按每页展示最多数据进行的计算得出的结果" />
         <el-tour-step target=".btn-next" title="向后按钮" description="这是去往后面一页" />
-        <el-tour-step target="#manage-goods-item" title="商品管理" description="这里是您管理店家商品的地方哦" />
-        <el-tour-step target="#manage-store-item" title="商店管理" description="这里是您管理店家的地方哦" />
-        <el-tour-step target="#manage-orders-item" title="订单管理" description="这里是您管理店家订单的地方哦" />
-        <el-tour-step target="#manage-person-info-item" title="个人信息" description="这里是您的个人信息，您可以在这里修改您的个人资料" />
+        <el-tour-step target="#business-statistics-item" title="数据统计" description="这里是您管理平台数据的地方哦" />
+        <el-tour-step target="#business-statistics-item" title="数据统计" description="请点击它" />
+        <el-tour-step target=".el-main" placement="left-start" title="数据统计" description="这个区域是您可以查看平台的营业额情况，分别可以选择昨天、近7日、本周和本月的营业额情况" />
+        <el-tour-step target=".el-button" placement="left-start" title="导出数据" description="点击这个按钮，你可以将本月的营业额数据导出为Excel文档" />
+
+        <el-tour-step target="#business-withdraw-item" title="提现记录" description="这里是管理平台抽成的地方，每当用户购买商品时，平台都会从商家那里抽取平台费。" />
+        <el-tour-step target="#business-store-item" title="商店管理" description="这里是您管理自己店铺的地方哦" />
+        <el-tour-step target="#business-orders-item" title="订单管理" description="这里是您管理订单的地方哦" />
+        <el-tour-step target="#business-person-info-item" title="个人信息" description="这里是您的个人信息，您可以在这里修改您的个人资料" />
         <el-tour-step target=".el-dropdown" title="头像" description="最后，在这个地方您也可以退出在线商城" />
 
         <!-- 自定义指示器 -->

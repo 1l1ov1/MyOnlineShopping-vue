@@ -52,6 +52,8 @@ const submitForm = async () => {
   const res = await userLoginService(ruleForm.value)
   // 设置token
   userStoreInstance.setToken(res.data.token)
+  // 设置刷新token
+  userStoreInstance.setRefreshToken(res.data.refreshToken)
   ElMessage.success('登录成功')
   // 跳到首页
   router.push('/')

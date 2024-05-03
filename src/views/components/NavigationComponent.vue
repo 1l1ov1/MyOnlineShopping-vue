@@ -36,6 +36,8 @@ const logout = async () => {
   await userLogoutService()
   // 删除token
   userStoreInstance.removeToken()
+  // 删除refreshToken
+  userStoreInstance.removeRefreshToken()
   // 清空用户信息
   userStoreInstance.setUser({})
   ElMessage.success('账号已退出')

@@ -37,6 +37,17 @@ export const userStore = defineStore(
       reminder.value = obj
     }
 
+    const refreshToken = ref('')
+    const setRefreshToken = (newToken) => {
+      refreshToken.value = newToken
+    }
+
+    const getRefreshToken = () => {
+      return refreshToken.value
+    }
+    const removeRefreshToken = () => {
+      refreshToken.value = ''
+    }
     return {
       token,
       setToken,
@@ -46,7 +57,11 @@ export const userStore = defineStore(
       getUser,
       setUser,
       reminder,
-      setReminder
+      setReminder,
+      refreshToken,
+      setRefreshToken,
+      getRefreshToken,
+      removeRefreshToken
     }
   },
   {

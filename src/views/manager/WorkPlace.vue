@@ -17,9 +17,6 @@ import { userLogoutService } from '@/api/user.js'
 import { useRouter } from 'vue-router'
 const userStoreInstance = userStore()
 const router = useRouter()
-onMounted(() => {
-  userStoreInstance.getUser()
-})
 
 const onCommand = async (command) => {
   if (command === 'logout') {
@@ -44,17 +41,28 @@ const onCommand = async (command) => {
 const GuideFinished = () => {
   userStoreInstance.firstComing = false
 }
+// 当关闭引导时
+const onClose = () => {
+  userStoreInstance.firstComing = false
+}
 // 当引导状态发生改变的时候的回调
 const onChange = (number) => {
   enableClick.value = false
-  if (number === 2) {
+  if (number === 2 || number === 17) {
     enableClick.value = true
   }
 }
-
 // 启用蒙层时，target 元素区域是否可以点击。
 const enableClick = ref(false)
-const open = ref(false)
+const open = ref(true)
+onMounted(() => {
+  userStoreInstance.getUser()
+
+  // 如果不是第一次来访问，则关闭引导
+  if (!userStoreInstance.firstComing) {
+    open.value = false
+  }
+})
 </script>
 
 <template>
@@ -77,7 +85,8 @@ const open = ref(false)
                     </el-icon>
                     <span>数据统计</span>
                 </el-menu-item>
-                <el-menu-item v-if="userStoreInstance.user.status === 0" index="/managerBack/withdrawRecord" id="manage-withdraw-item">
+                <el-menu-item v-if="userStoreInstance.user.status === 0" index="/managerBack/withdrawRecord"
+                    id="manage-withdraw-item">
                     <el-icon>
                         <PieChart />
                     </el-icon>
@@ -101,7 +110,7 @@ const open = ref(false)
                     </svg>
                     <span>&nbsp;商品管理</span>
                 </el-menu-item>
-                <el-menu-item index="/managerBack/category" id="manage-goods-item">
+                <el-menu-item index="/managerBack/category" id="manage-category-item">
                     <svg t="1711414928090" class="icon" viewBox="0 0 1024 1024" version="1.1"
                         xmlns="http://www.w3.org/2000/svg" p-id="8329" width="20" height="20">
                         <path
@@ -122,7 +131,7 @@ const open = ref(false)
                     </svg>
                     <span>&nbsp;商店管理</span>
                 </el-menu-item>
-                <el-sub-menu index="/managerBack/apply" id="manage-apply">
+                <el-sub-menu index="/managerBack/apply" id="manage-apply-item">
                     <template #title>
                         <svg t="1711348932273" class="icon" viewBox="0 0 1024 1024" version="1.1"
                             xmlns="http://www.w3.org/2000/svg" p-id="6762" width="20" height="20">
@@ -177,21 +186,21 @@ const open = ref(false)
                 </el-sub-menu>
                 <el-menu-item index="/managerBack/report/comment-report">
                     <svg t="1713537420374" class="icon" viewBox="0 0 1024 1024" version="1.1"
-                            xmlns="http://www.w3.org/2000/svg" p-id="2717" width="20" height="20">
-                            <path
-                              d="M924.8 908H284v-32h640.8c8 0 15.2-4 20-11.2 4-7.2 4-15.2 0-22.4L532 128c-4-7.2-11.2-11.2-20-11.2-8 0-15.2 4-20 11.2l-320 555.2-28-16L464.8 112c9.6-16.8 27.2-27.2 47.2-27.2 20 0 37.6 10.4 47.2 27.2l412.8 714.4c9.6 16.8 9.6 37.6 0 54.4-9.6 17.6-27.2 27.2-47.2 27.2z"
-                              fill="#666666" p-id="2718"></path>
-                            <path d="M517.6 737.6m-32 0a32 32 0 1 0 64 0 32 32 0 1 0-64 0Z" fill="#666666" p-id="2719">
-                            </path>
-                            <path
-                              d="M517.6 672c-17.6 0-32-14.4-32-32V416c0-17.6 14.4-32 32-32s32 14.4 32 32v224c0 17.6-14.4 32-32 32z"
-                              fill="#666666" p-id="2720"></path>
-                            <path d="M158.4 675.2m-16 0a16 16 0 1 0 32 0 16 16 0 1 0-32 0Z" fill="#666666" p-id="2721">
-                            </path>
-                            <path d="M284 892m-16 0a16 16 0 1 0 32 0 16 16 0 1 0-32 0Z" fill="#666666" p-id="2722">
-                            </path>
-                            <path d="M208 892m-16 0a16 16 0 1 0 32 0 16 16 0 1 0-32 0Z" fill="#666666" p-id="2723">
-                            </path>
+                        xmlns="http://www.w3.org/2000/svg" p-id="2717" width="20" height="20">
+                        <path
+                            d="M924.8 908H284v-32h640.8c8 0 15.2-4 20-11.2 4-7.2 4-15.2 0-22.4L532 128c-4-7.2-11.2-11.2-20-11.2-8 0-15.2 4-20 11.2l-320 555.2-28-16L464.8 112c9.6-16.8 27.2-27.2 47.2-27.2 20 0 37.6 10.4 47.2 27.2l412.8 714.4c9.6 16.8 9.6 37.6 0 54.4-9.6 17.6-27.2 27.2-47.2 27.2z"
+                            fill="#666666" p-id="2718"></path>
+                        <path d="M517.6 737.6m-32 0a32 32 0 1 0 64 0 32 32 0 1 0-64 0Z" fill="#666666" p-id="2719">
+                        </path>
+                        <path
+                            d="M517.6 672c-17.6 0-32-14.4-32-32V416c0-17.6 14.4-32 32-32s32 14.4 32 32v224c0 17.6-14.4 32-32 32z"
+                            fill="#666666" p-id="2720"></path>
+                        <path d="M158.4 675.2m-16 0a16 16 0 1 0 32 0 16 16 0 1 0-32 0Z" fill="#666666" p-id="2721">
+                        </path>
+                        <path d="M284 892m-16 0a16 16 0 1 0 32 0 16 16 0 1 0-32 0Z" fill="#666666" p-id="2722">
+                        </path>
+                        <path d="M208 892m-16 0a16 16 0 1 0 32 0 16 16 0 1 0-32 0Z" fill="#666666" p-id="2723">
+                        </path>
                     </svg>
                     <span>&nbsp;评论举报管理</span>
                 </el-menu-item>
@@ -254,11 +263,13 @@ const open = ref(false)
         </el-container>
     </el-container>
 
-    <el-tour v-model="open" @finish="GuideFinished" @change="onChange" :target-area-clickable="enableClick" :mask="{
-                style: {
-                    boxShadow: 'insert 0 0 15px'
-                }
-            }">
+    <el-tour v-model="open" @finish="GuideFinished"
+    @change="onChange" @close="onClose"
+    :target-area-clickable="enableClick" :mask="{
+     style: {
+           boxShadow: 'insert 0 0 15px'
+            }
+    }">
         <el-tour-step target=".el-header" title="欢迎( ＾∀＾）／欢迎＼( ＾∀＾）"
             description="管理员您好，欢迎来到您的工作界面，接下来由我来告诉您每个工作区的功能吧(*^_^*)" />
         <el-tour-step title="拥有的功能" target=".el-menu--vertical" description="这是您可以拥有的功能，让我一一为您解答吧🤭(●'◡'●)" />
@@ -269,7 +280,7 @@ const open = ref(false)
             description="这个部分你可以输入条件，然后点击搜索按钮进行搜索或者点击重置按钮清空搜索条件。" />
         <el-tour-step target=".el-table" title="查询结果" type="primary" description="这个表格是分页查询后查询到的结果，
         您可以在这里看到所有账户状态，注意当某一行账号的身份为管理员时，您无法对其账号状态进行修改。当某一行账号的账号状态为禁用的时候，
-        会用颜色标记出这一行来提示您。" />
+        会用颜色标记出这一行来提示您。并且用户修改用户的当前账号状态将是永久性的。" />
         <el-tour-step target=".el-checkbox" title="单选框" description="当您勾选最上层的单选框时，会将这一页的所有行选中
         ，而点击其中的某一个单选框会将该行选中" />
         <el-tour-step target=".is-plain" title="修改和删除" description="这两个按钮分别为修改和删除该行账号信息" />
@@ -280,8 +291,16 @@ const open = ref(false)
         <el-tour-step target=".btn-prev" title="向前按钮" description="这是去往前面一页" />
         <el-tour-step target=".el-pager" title="页码数" description="这是所有数据按每页展示最多数据进行的计算得出的结果" />
         <el-tour-step target=".btn-next" title="向后按钮" description="这是去往后面一页" />
+        <el-tour-step target="#manage-statistic-item" title="数据统计" description="这里是您管理平台数据的地方哦" />
+        <el-tour-step target="#manage-statistic-item" title="数据统计" description="请点击它" />
+        <el-tour-step target=".el-main" placement="left-start" title="数据统计" description="这个区域是您可以查看平台的营业额情况，分别可以选择昨天、近7日、本周和本月的营业额情况" />
+        <el-tour-step target=".el-button" placement="left-start" title="导出数据" description="点击这个按钮，你可以将本月的营业额数据导出为Excel文档" />
+
+        <el-tour-step target="#manage-withdraw-item" title="提现记录" description="这里是管理平台抽成的地方，每当用户购买商品时，平台都会从商家那里抽取平台费。" />
         <el-tour-step target="#manage-goods-item" title="商品管理" description="这里是您管理店家商品的地方哦" />
+        <el-tour-step target="#manage-category-item" title="分类管理" description="这里是您管理商品分类的地方哦" />
         <el-tour-step target="#manage-store-item" title="商店管理" description="这里是您管理店家的地方哦" />
+        <el-tour-step target="#manage-apply-item" title="用户申请开店管理" description="这里是您管理用户开店的地方哦" />
         <el-tour-step target="#manage-orders-item" title="订单管理" description="这里是您管理店家订单的地方哦" />
         <el-tour-step target="#manage-person-info-item" title="个人信息" description="这里是您的个人信息，您可以在这里修改您的个人资料" />
         <el-tour-step target=".el-dropdown" title="头像" description="最后，在这个地方您也可以退出在线商城" />
