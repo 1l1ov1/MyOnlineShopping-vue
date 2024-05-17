@@ -242,8 +242,7 @@ const sortTable = ({ column, prop, order }) => {
       </el-table-column> -->
       <el-table-column prop="logo" label="店铺Logo" width="100px">
         <template #default="{ row }">
-          <el-image :src="((row.logo !== '' && row.logo !== null && row.logo !== undefined) ?
-        require('@/assets/uploadStore/' + row.logo) : require('@/assets/试用商户.png'))"></el-image>
+          <el-image :src="require('@/assets/uploadStore/' + row.logo)"></el-image>
         </template>
       </el-table-column>
       <el-table-column prop="createTime" label="店的创建时间" align="center" />

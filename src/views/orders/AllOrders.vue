@@ -17,7 +17,9 @@ const OrdersType = {
   ALL: 0,
   UNFILLED: 1,
   FILLED: 2,
-  REFUND: 3
+  REFUND: 3,
+  RECEIVE: 4,
+  SUCCESSFUL: 5
 }
 const translation = (activeName) => {
   switch (activeName) {
@@ -25,6 +27,7 @@ const translation = (activeName) => {
     case 'unfilled': return OrdersType.UNFILLED
     case 'filled': return OrdersType.FILLED
     case 'refund': return OrdersType.REFUND
+    case 'successful': return OrdersType.SUCCESSFUL
   }
 }
 // 当标签页转换的时候
@@ -37,6 +40,10 @@ const tabChange = (tabName) => {
     queryOneTypeOrders(OrdersType.FILLED)
   } else if (tabName === 'refund') {
     queryOneTypeOrders(OrdersType.REFUND)
+  } else if (tabName === 'received') {
+    queryOneTypeOrders(OrdersType.RECEIVE)
+  } else if (tabName === 'successful') {
+    queryOneTypeOrders(OrdersType.SUCCESSFUL)
   }
 }
 
@@ -70,7 +77,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <NavigationComponent ></NavigationComponent>
+  <NavigationComponent></NavigationComponent>
   <el-tabs v-model="activeName" class="demo-tabs" @tab-change="tabChange" :before-leave="beforeLeave"
     @tab-click="tabClick">
     <el-tab-pane label="全部订单" name="all">
@@ -82,19 +89,31 @@ onMounted(() => {
     <el-tab-pane label="未发货订单" name="unfilled">
       <OrdersFooter :ordersList="ordersList" :pageObj="pageObj" @pagination="pagination"></OrdersFooter>
       <OrdersHeader></OrdersHeader>
-  <OrdersMain :ordersList="ordersList" @updateOrdersList="updateOrdersList"></OrdersMain>
+      <OrdersMain :ordersList="ordersList" @updateOrdersList="updateOrdersList"></OrdersMain>
       <OrdersFooter :ordersList="ordersList" :pageObj="pageObj" @pagination="pagination"></OrdersFooter>
     </el-tab-pane>
     <el-tab-pane label="已发货订单" name="filled">
       <OrdersFooter :ordersList="ordersList" :pageObj="pageObj" @pagination="pagination"></OrdersFooter>
       <OrdersHeader></OrdersHeader>
-  <OrdersMain :ordersList="ordersList" @updateOrdersList="updateOrdersList"></OrdersMain>
+      <OrdersMain :ordersList="ordersList" @updateOrdersList="updateOrdersList"></OrdersMain>
       <OrdersFooter :ordersList="ordersList" :pageObj="pageObj" @pagination="pagination"></OrdersFooter>
     </el-tab-pane>
     <el-tab-pane label="退款订单" name="refund">
       <OrdersFooter :ordersList="ordersList" :pageObj="pageObj" @pagination="pagination"></OrdersFooter>
       <OrdersHeader></OrdersHeader>
-  <OrdersMain :ordersList="ordersList" @updateOrdersList="updateOrdersList"></OrdersMain>
+      <OrdersMain :ordersList="ordersList" @updateOrdersList="updateOrdersList"></OrdersMain>
+      <OrdersFooter :ordersList="ordersList" :pageObj="pageObj" @pagination="pagination"></OrdersFooter>
+    </el-tab-pane>
+    <el-tab-pane label="已签收订单" name="received">
+      <OrdersFooter :ordersList="ordersList" :pageObj="pageObj" @pagination="pagination"></OrdersFooter>
+      <OrdersHeader></OrdersHeader>
+      <OrdersMain :ordersList="ordersList" @updateOrdersList="updateOrdersList"></OrdersMain>
+      <OrdersFooter :ordersList="ordersList" :pageObj="pageObj" @pagination="pagination"></OrdersFooter>
+    </el-tab-pane>
+    <el-tab-pane label="交易成功订单" name="successful">
+      <OrdersFooter :ordersList="ordersList" :pageObj="pageObj" @pagination="pagination"></OrdersFooter>
+      <OrdersHeader></OrdersHeader>
+      <OrdersMain :ordersList="ordersList" @updateOrdersList="updateOrdersList"></OrdersMain>
       <OrdersFooter :ordersList="ordersList" :pageObj="pageObj" @pagination="pagination"></OrdersFooter>
     </el-tab-pane>
   </el-tabs>

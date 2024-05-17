@@ -160,8 +160,7 @@ onMounted(() => {
                                 <a class="item-link" style="text-decoration: none;" target="_blank"
                                     @click="() => router.push('/goodsDetail/' + item.goodsId)">
                                     <div class="img-wrapper">
-                                        <el-image lazy :src="(item.goods.coverPic !== null && item.goods.coverPic != undefined && item.goods.coverPic != '') ?
-        require('@/assets/uploadGoods/' + item.goods.coverPic) : require('@/assets/默认商品图.png')" />
+                                        <el-image lazy :src="require('@/assets/uploadGoods/' + item.goods.coverPic)" />
                                     </div>
                                     <div class="info-wrapper">
                                         <div class="title">{{ item.goods.goodsName }}</div>
@@ -194,10 +193,7 @@ onMounted(() => {
                                 <a class="item-link" style="text-decoration: none;" target="_blank"
                                     @click="() => router.push('/storeDetail/' + item.storeId)">
                                     <div class="img-wrapper">
-                                        <el-image :src="(item.store.logo !== null
-        && item.store.logo !== undefined
-        && item.store.logo !== '') ?
-        require('@/assets/uploadStore/' + item.store.logo) : require('@/assets/试用商户.png')" />
+                                        <el-image :src=" require('@/assets/uploadStore/' + item.store.logo)" />
                                     </div>
                                     <div class="info-wrapper">
                                         <div class="title">{{ item.store.storeName }}</div>

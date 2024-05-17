@@ -273,8 +273,7 @@ onMounted(() => {
       </el-table-column>
       <el-table-column prop="store.coverPic" label="商品图片" width="100" align="center">
         <template #default="{ row }">
-          <el-avatar :src="(row.coverPic !== undefined && row.coverPic !== null && row.coverPic !== '') ?
-        require('@/assets/uploadGoods/' + row.coverPic) : require('@/assets/默认商品图.png')" />
+          <el-avatar :src="require('@/assets/uploadGoods/' + row.coverPic)" />
         </template>
       </el-table-column>
       <el-table-column prop="createTime" label="商品创建时间" align="center" />

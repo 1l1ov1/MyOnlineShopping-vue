@@ -22,7 +22,6 @@ const total = ref(0)
 const queryWithdrawRecord = async () => {
   const res = await queryWithdrawRecordService(params.value)
   withdrawRecordList.value = res.data.data
-  console.log(withdrawRecordList.value)
   total.value = res.data.total
   withdrawRecordList.value.forEach((item, index) => {
     item.serialNumber = (params.value.page - 1) * params.value.pageSize + index + 1

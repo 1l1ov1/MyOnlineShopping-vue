@@ -30,8 +30,7 @@ onMounted(() => {
                         <a class="item-link" style="text-decoration: none;" target="_blank"
                             @click="() => router.push('/goodsDetail/' + item.id)">
                             <div class="img-wrapper">
-                                <el-image lazy :src="(item.coverPic !== null && item.coverPic != undefined && item.coverPic != '') ?
-                require('@/assets/uploadGoods/' + item.coverPic) : require('@/assets/默认商品图.png')" />
+                                <el-image lazy :src="require('@/assets/uploadGoods/' + item.coverPic)" />
                             </div>
                             <div class="info-wrapper">
                                 <div class="title">{{ item.goodsName }}</div>

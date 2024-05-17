@@ -9,8 +9,7 @@ defineProps({
             <div class="PicGallery--root">
                 <div class="PicGallery--mainPicWrap" style="position: relative;">
                     <img class="PicGallery--mainPic"
-                    :src="(coverPic !== null &&coverPic !== undefined && coverPic !== '')
-                    ? require('@/assets/uploadGoods/' + coverPic) : require('@/assets/默认商品图.png')"
+                    :src="require('@/assets/uploadGoods/' + coverPic)"
                     style="padding-top: 0px; width: 338px; height: 450px;">
              </div>
          </div>

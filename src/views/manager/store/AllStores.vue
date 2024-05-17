@@ -234,8 +234,7 @@ const sortTable = ({ column, prop, order }) => {
       <el-table-column prop="storeName" label="商店名称" width="150" align="center" />
       <el-table-column prop="logo" label="商店Logo">
         <template #default="{row}">
-          <el-image :src="((row.logo !== '' && row.logo !== null && row.logo !== undefined) ?
-            require('@/assets/uploadStore/' + row.logo) : require('@/assets/试用商户.png'))"></el-image>
+          <el-image :src=" require('@/assets/uploadStore/' + row.logo)"></el-image>
         </template>
       </el-table-column>
       <el-table-column prop="address" label="地址" width="200" align="center">

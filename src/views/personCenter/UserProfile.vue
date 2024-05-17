@@ -15,11 +15,11 @@ import FooterComponent from '../components/FooterComponent.vue'
 import AddAddress from '@/views/components/AddAddress.vue'
 const userStoreInstance = userStore()
 // 得到仓库中的user
-
+// 创建表单实体
 const formModel = ref({
   ...userStoreInstance.user
 })
-//
+// 建立表单验证规则
 const rules = {
   phone: [
     { required: true, message: '请输入电话号码' },
@@ -29,6 +29,7 @@ const rules = {
 }
 
 const formRef = ref()
+// 提交表单
 const onSubmit = async () => {
   const valid = await formRef.value.validate()
   if (valid) {
@@ -60,7 +61,6 @@ const handleAvatarSuccess = (res, file) => {
 
 // 图片上传前先检查
 const beforeAvatarUpload = (UploadRawFile) => {
-  console.log(UploadRawFile.type)
   const type = UploadRawFile.type === 'image/jpeg' ||
     UploadRawFile.type === 'image/png' ||
     UploadRawFile.type === 'image/jpg'
@@ -75,6 +75,7 @@ const beforeAvatarUpload = (UploadRawFile) => {
 
   return true
 }
+// 地址选择项
 const options = ref(regionData)
 // 选择地址的数组
 const selectedOptions = ref([])
@@ -82,7 +83,6 @@ const selectedOptions = ref([])
 // val 选中的值
 // 索引下标
 const handleChange = (val, index) => {
-  console.log(val)
   formModel.value.addressList[index].provinceCode = val[0]
   formModel.value.addressList[index].provinceName = codeToText[val[0]]
 
@@ -92,12 +92,12 @@ const handleChange = (val, index) => {
   formModel.value.addressList[index].districtCode = val[2]
   formModel.value.addressList[index].districtName = codeToText[val[2]]
   // 当修改完后，结束编辑，隐藏选择器
-  isEditAddress.value = false
+  isEditAddress.value[index] = false
 }
-const isEditAddress = ref(false)
+// const isEditAddress = ref(false)
+const isEditAddress = ref([])
 const columnDbClick = (row, column, cell, event) => {
   if (column.label === '详细地址') {
-    // const oldValue = row[column.property]
     // 创建输入框
     const cellInput = document.createElement('textarea')
     // 设置输入框的值
@@ -123,10 +123,16 @@ const columnDbClick = (row, column, cell, event) => {
       row[column.property] = cellInput.value
     }
   } else if (column.label === '收获地址') {
-    // 开启选择器
-    isEditAddress.value = true
+    // 遍历selectedOptions,找到点击的索引
+  // 使用findIndex方法直接获取匹配项的索引
+    const index = selectedOptions.value.findIndex(option => option.id === row.id)
+    if (index !== -1) {
+      // 找到了匹配项，开启选择器
+      isEditAddress.value[index] = true
+    }
   }
 }
+
 // 更改默认地址
 const onEditAddress = async (row) => {
   const res = await updateAddressDefault(row)
@@ -162,6 +168,23 @@ const updateData = async () => {
 }
 onMounted(() => {
   selectedOptions.value = formModel.value.addressList
+  // 初始化编辑地址，全部为没有在编辑状态
+  for (let i = 0; i < selectedOptions.value.length; i++) {
+    isEditAddress.value[i] = false
+  }
+  // 给body添加点击事件，去检查是否点击了级联选择器，否则点击其他地方取消所有编辑状态
+  document.body.addEventListener('click', (ev) => {
+    // 如果点击的部分有类el-input__inner或者是el-cascader__label说明是el-cascader
+    const isCascader = ev.target.classList.contains('el-input__inner') |
+      ev.target.classList.contains('el-cascader-node__label')
+    // 如果不是输入框
+    if (!isCascader) {
+      // 点击其他地方，取消所有编辑状态
+      for (let i = 0; i < isEditAddress.value.length; i++) {
+        isEditAddress.value[i] = false
+      }
+    }
+  })
 })
 </script>
 
@@ -170,7 +193,8 @@ onMounted(() => {
   <page-container title="基本资料">
     <el-row>
       <el-col :span="12">
-        <el-form :model="formModel" :rules="rules" ref="formRef" label-width="100px" size="large">
+        <el-form :model="formModel" :rules="rules"
+        ref="formRef" label-width="100px" size="large">
           <el-form-item label="头像" prop="imageUrl">
             <!-- 此处需要关闭 element-plus的自动上传，不需要配置action等参数
             只需要做前端的本地预览即可，无需在提交之前上传图片
@@ -179,8 +203,7 @@ onMounted(() => {
               action="/api/img/uploadAvatar" :on-change="onUploadFile" :before-upload="beforeAvatarUpload"
               :on-success="handleAvatarSuccess" :headers="{ Authorization: userStoreInstance.token }">
               <img
-                :src="(formModel.avatar === undefined || formModel.avatar === '' || formModel.avatar === null) ?
-        ((imgUrl === '' ? require('@/assets/avatar.jpg') : imgUrl)) : require('@/assets/uploadAvatar/' + formModel.avatar)"
+                :src="require('@/assets/uploadAvatar/' + formModel.avatar )"
                 class="avatar" />
               <el-icon class="el-icon--upload"><upload-filled /></el-icon>
               <div class="el-upload__text">
@@ -207,13 +230,14 @@ onMounted(() => {
           </el-form-item>
           <el-form-item label="收货地址" prop="addressList">
 
-            <el-table :data="formModel.addressList" border style="width: 100%" @cell-dblclick="columnDbClick">
+            <el-table :data="formModel.addressList" border
+            style="width: 100%" @cell-dblclick="columnDbClick">
               <el-table-column prop="address" label="收获地址">
 
                 <template #default="scope">
-                  <el-cascader v-if="isEditAddress" size="large" :options="options" clearable
+                  <el-cascader v-if="isEditAddress[scope.$index]" size="large" :options="options" clearable
                     v-model="selectedOptions[scope.$index]['districtCode']" placeholder="请选择地址"
-                    @change="handleChange($event, scope.$index)" />
+                    @change="handleChange($event, scope.$index)"/>
                   <div v-else>
                     {{ scope.row.provinceName + '/' + scope.row.cityName + '/' + scope.row.districtName }}
                   </div>

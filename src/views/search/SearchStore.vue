@@ -31,8 +31,7 @@ onMounted(() => {
                         <a class="item-link" style="text-decoration: none;" target="_blank"
                             @click="() => router.push('/storeDetail/' + item.id)">
                             <div class="img-wrapper">
-                                <el-image lazy :src="(item.logo !== null && item.logo !== undefined && item.logo !== '') ?
-                        require('@/assets/uploadStore/' + item.logo) : require('@/assets/试用商户.png')" />
+                                <el-image lazy :src="require('@/assets/uploadStore/' + item.logo)" />
                             </div>
                             <div class="info-wrapper">
                                 <div class="title">{{ item.storeName }}</div>

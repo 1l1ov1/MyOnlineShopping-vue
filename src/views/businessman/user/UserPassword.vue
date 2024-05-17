@@ -64,7 +64,6 @@ const userStoreInstance = userStore()
 const onSubmit = async () => {
   const valid = await formRef.value.validate()
   if (valid) {
-    console.log(pwdForm.value)
     await userUpdatePassService(pwdForm.value)
     ElMessage({ type: 'success', message: '更换密码成功' })
     userStoreInstance.setToken('')

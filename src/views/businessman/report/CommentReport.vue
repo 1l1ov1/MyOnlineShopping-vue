@@ -78,7 +78,6 @@ const groupReportsByComment = (reports) => {
       child.sequence = index + 1
     })
   })
-  console.log(groupedReports)
   return Object.values(groupedReports)
 }
 

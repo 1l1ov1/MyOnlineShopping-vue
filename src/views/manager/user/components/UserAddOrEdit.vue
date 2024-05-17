@@ -144,7 +144,6 @@ const onSubmit = async () => {
   await formRef.value.validate()
   const isEdit = formModel.value.id
   if (isEdit) {
-    console.log(formModel.value)
     await managerUpdateUserService(formModel.value)
     ElMessage.success('编辑成功')
   } else {

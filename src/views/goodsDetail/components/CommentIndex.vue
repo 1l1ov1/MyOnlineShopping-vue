@@ -50,7 +50,7 @@ const queryComments = async (params) => {
   const res = await queryCommentsService(params)
   total.value = res.data.total
   commentsList.value = res.data.comments
-  console.log(commentsList.value)
+  emit('returnComments', commentsList.value)
   if (commentsList.value == null) {
     return
   }
@@ -206,6 +206,7 @@ const openReportDialog = ref()
 const handleReport = (commentId) => {
   openReportDialog.value.open(commentId)
 }
+const emit = defineEmits(['returnComments'])
 </script>
 
 <template>

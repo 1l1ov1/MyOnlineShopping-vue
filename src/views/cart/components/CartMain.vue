@@ -80,7 +80,6 @@ watch(
         })
       })
       ids = ids.map(id => id).join(',')
-      console.log(typeof ids)
       deleteCart(ids)
     }
   }
@@ -161,12 +160,17 @@ const getUserCarts = async () => {
 }
 // 表单数据
 const tableData = ref()
+// 判断是否需要修改多选框数量
 const flag = ref(true)
 watch(
   () => tableData.value,
   (newValue, oldValue) => {
     tableData.value = newValue
     if (flag.value) {
+      // 如果要修改多选框数量
+      // 先清空
+      storeCheckBox.value = []
+      goodsCheckBox.value = []
       for (let i = 0; i < tableData.value.length; i++) {
         storeCheckBox.value[i] = false
         goodsCheckBox.value[i] = []
@@ -211,23 +215,31 @@ const handleCheckAllChange = (value) => {
   emit('isSubmit', false)
   emit('checkAll', value)
 }
+
 const changeAll = (flag) => {
   // 先清空
   selectedGoodsTotalPrice.value = 0.00
+  // 勾选数量为0
   selectNumber.value = 0
+  // 遍历
   for (let i = 0; i < tableData.value.length; i++) {
+    // 将所有商店的多选框取消或勾选
     storeCheckBox.value[i] = flag
     for (let j = 0; j < tableData.value[i].cartList.length; j++) {
+      // 将每个商品的多选框取消或勾选
       goodsCheckBox.value[i][j] = flag
+      // 计算勾选的商品的总价
       selectedGoodsTotalPrice.value = flag
         ? selectedGoodsTotalPrice.value += getGoodsPrice(i, j)
         : selectedGoodsTotalPrice.value
+        // 勾选数量
       selectNumber.value = flag ? selectNumber.value += 1 : selectNumber.value
       emit('isDisable', !flag)
       emit('totalPrice', selectedGoodsTotalPrice.value)
       emit('selectNumber', selectNumber.value)
     }
   }
+  checkAll.value = flag
 }
 const totalPrice = computed(() => (item) => {
   return (item.goodsPrice * item.discount * item.number).toFixed(2)
@@ -255,7 +267,7 @@ const handleCheckedStore = (storeIndex) => {
       }
     }
     // 结算按钮应该不禁用
-    emit('isDisable', false)
+    // emit('isDisable', false)
     emit('totalPrice', selectedGoodsTotalPrice.value)
     emit('selectNumber', selectNumber.value)
   } else {
@@ -268,13 +280,19 @@ const handleCheckedStore = (storeIndex) => {
       selectNumber.value -= 1
     }
     // 结算按钮应该禁用
-    emit('isDisable', true)
+
     emit('totalPrice', selectedGoodsTotalPrice.value)
     emit('selectNumber', selectNumber.value)
     checkAll.value = false
   }
-  checkAll.value = storeCheckBox.value.every(check => check)
-  console.log('checkAll：', checkAll.value)
+  // 查看有多少个商店被勾选
+  const checkedItemsCount = storeCheckBox.value
+    .reduce((count, isChecked) => count + (isChecked ? 1 : 0), 0)
+
+  // 如果说被勾选数大于0且小于等于storeCheckBox.value.length，则结算按钮不应该被禁用
+  emit('isDisable', !checkedItemsCount > 0 && checkedItemsCount <= storeCheckBox.value.length)
+  // 如果说被勾选数等于storeCheckBox.value.length，则全选框为true
+  checkAll.value = checkedItemsCount === storeCheckBox.value.length
   // 清空参数，只有当点击提交的时候，才能够放进去，其余都必须为空
   params.value = {
     userId: userStoreInstance.user.id,
@@ -351,10 +369,13 @@ const deleteCart = async (id) => {
         type: 'warning'
       }
     ).then(async () => {
+      // 删除
       await deleteUserCartItemService(id)
       flag.value = true
+      // 刷新购物车
       getUserCarts()
       ElMessage.success('删除成功')
+      changeAll(false)
     }).catch(() => {
 
     })
@@ -365,6 +386,10 @@ const deleteCart = async (id) => {
     changeAll(false)
     ElMessage.success('删除成功')
   }
+  // 不管成功还是失败，就通知父组件删除函数已经运行过,以便后续可以继续删除
+  emit('batchDeleteCart', false)
+  // 然后允许修改多选框的数量
+  flag.value = true
 }
 // 将商品添加进收藏
 const addFavorite = async (cartId, goodsId) => {
@@ -446,7 +471,8 @@ const emit = defineEmits(['isDisable',
   'length',
   'selectNumber',
   'checkAll',
-  'saveFavorite'])
+  'saveFavorite',
+  'batchDeleteCart'])
 onMounted(() => {
   getUserCarts()
 })
@@ -491,11 +517,11 @@ onMounted(() => {
           <div class="J_ItemHead shop">
             <div class="shop-info">
               <div class="cart-checkbox">
-
                 <el-checkbox class="store-checkbox" v-model="storeCheckBox[storeIndex]"
                   @change="handleCheckedStore(storeIndex)"></el-checkbox>
               </div>
-              店铺：<a>{{ item.store.storeName }}</a>
+              店铺：<el-link :underline="false"
+               href="javascript:void(0)" @click="() => router.push(`/storeDetail/` + item.store.id)">{{ item.store.storeName }}</el-link>
             </div>
           </div>
           <div class="order-content">
@@ -514,8 +540,7 @@ onMounted(() => {
                       <div class="td-inner">
                         <div class="item-pic J_ItemPic img-loaded">
                           <a :href="() => router.push('/goodsDetail/')">
-                            <img class="itempic J_ItemImg" :src="(goods.coverPic !== null && goods.coverPic !== '') ?
-                require('@/assets/uploadGoods/' + goods.coverPic) : require('@/assets/默认商品图.png')">
+                            <img class="itempic J_ItemImg" :src="require('@/assets/uploadGoods/' + goods.coverPic)">
                           </a>
                         </div>
                         <div class="item-info">

@@ -7,10 +7,12 @@ import { useRouter } from 'vue-router'
 // import NavigationComponents from '../components/NavigationComponents.vue'
 import FooterComponent from '../components/FooterComponent.vue'
 import LogoComponent from '../components/LogoComponent.vue'
-import { VERIFY_CODE_URL } from '@/constant/baseUrl.js'
-
+// import { BASE_URL } from '@/constant/baseUrl.js'
+const generateImageUrl = () => {
+  return 'http://' + `${process.env.VUE_APP_API_URL}`
+}
 // 表单对象
-const imgUrl = ref(VERIFY_CODE_URL + '/api/user/verify?time=' + new Date())
+const imgUrl = ref(generateImageUrl() + '/user/verify?time=' + new Date())
 const ruleForm = ref({
   username: '',
   password: '',
@@ -68,7 +70,7 @@ const resetForm = (ruleFormRef) => {
 }
 // 刷新验证码
 const resetImg = () => {
-  imgUrl.value = VERIFY_CODE_URL + '/api/user/verify?time=' + new Date()
+  imgUrl.value = generateImageUrl() + '/user/verify?time=' + new Date()
 }
 // 回车登录
 const keyDown = (e) => {

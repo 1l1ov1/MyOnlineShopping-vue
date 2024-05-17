@@ -12,6 +12,7 @@ import {
   codeToText
   // pcaTextArr // 省市区三级联动数据，纯汉字
 } from 'element-china-area-data'
+import { userConstant, applyConstant } from '@/constant/constants'
 const userStoreInstance = userStore()
 const userCreateStoreInstance = userCreateStore()
 // 表单对象
@@ -127,8 +128,6 @@ const handleChange = (name) => {
 }
 
 const handleLeave = (activeName, oldActiveName) => {
-  console.log(activeName)
-  console.log(oldActiveName)
   return true
 }
 
@@ -147,13 +146,13 @@ const isApproved = async () => {
   // 如果返回结果不为空,说明发送过申请并且没有被拒绝或者没有发送过申请 即还在待审核或者已通过或者没有发送过
   if (apply !== null) {
     // 如果还在待审核状态
-    if (apply.status === 0) {
+    if (apply.status === applyConstant.applyStatus.UNDER_REVIEW.value) {
       active.value = 3
       ElMessage({
         message: '管理员还在审核中哦,请耐心等待',
         type: 'warning'
       })
-    } else if (apply.status === 1) {
+    } else if (apply.status === applyConstant.applyStatus.APPROVED.value) {
       // 如果已经通过
       active.value = 4
       ElMessage.success('审核通过')
@@ -175,20 +174,26 @@ const isApproved = async () => {
 }
 // 开店
 const createStore = async (store) => {
-  await userCreateStoreService(store)
-  router.push('/')
+  const res = await userCreateStoreService(store)
+  if (res.code === 1) {
+    ElMessage.success(res.msg)
+    router.push('/')
+  }
 }
 onMounted(() => {
   // 绑定监听事件
   window.addEventListener('keydown', keyDown)
   userStoreInstance.getUser()
-  if (userStoreInstance.user.status === 2) {
+  // 查询该用户的状态，如果用户的状态为商家
+  if (userStoreInstance.user.status === userConstant.userStatus.BUSINESSMAN.value) {
+    // 说明申请成功
     active.value = 4
     ElMessage({
       message: '申请成功',
       type: 'success',
       onClose: () => router.push('/')
     })
+    return
   }
 
   isApproved()
@@ -323,7 +328,7 @@ const activeName = ref('first')
           </div>
         </div>
       </el-tab-pane>
-      <el-tab-pane label="企业认证" name="second">
+      <!-- <el-tab-pane label="企业认证" name="second">
         <div class="steps-wrapper">
           <el-steps :active="active" finish-status="success" align-center>
             <el-step title="第一步" description="填写店铺信息" />
@@ -332,7 +337,7 @@ const activeName = ref('first')
             <el-step title="第四步" description="Some description" />
           </el-steps>
         </div>
-      </el-tab-pane>
+      </el-tab-pane> -->
     </el-tabs>
   </div>
   <!--   <div class="main">

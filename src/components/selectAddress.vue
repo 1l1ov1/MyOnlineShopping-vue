@@ -13,9 +13,9 @@ const selectedOptions = ref([])
 watch(
   () => props.defaultAddress,
   (newValue) => {
-    selectedOptions.value[0] = props.defaultAddress[0].provinceCode
-    selectedOptions.value[1] = props.defaultAddress[0].cityCode
-    selectedOptions.value[2] = props.defaultAddress[0].districtCode
+    selectedOptions.value[0] = props.defaultAddress.provinceCode
+    selectedOptions.value[1] = props.defaultAddress.cityCode
+    selectedOptions.value[2] = props.defaultAddress.districtCode
   }
 )
 

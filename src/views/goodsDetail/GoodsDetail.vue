@@ -40,6 +40,16 @@ const handleEnterPress = (event) => {
     }
   })
 }
+const star = ref(0.0)
+const getComments = (commentsList) => {
+  // 遍历评论
+  commentsList.forEach(comments => {
+    // 计算每个评论的评价
+    star.value += comments.star
+  })
+  // 计算平均评价
+  star.value = star.value / commentsList.length
+}
 onMounted(() => {
   getDetail()
 })
@@ -65,7 +75,7 @@ onMounted(() => {
             </div>
         </div>
         <div class="container">
-            <ShopHeader :store="store"></ShopHeader>
+            <ShopHeader :store="store" :star="star"></ShopHeader>
             <div class="Item--content">
                 <GoodsImage :coverPic="goods.coverPic"></GoodsImage>
                 <div class="BasicContent--itemInfo">
@@ -96,7 +106,7 @@ onMounted(() => {
             </el-affix>
         </div>
         <div class="comment-root">
-        <Comment :store="store" :goods="goods"/>
+        <Comment :store="store" :goods="goods" @returnComments="getComments"/>
     </div>
     </div>
 

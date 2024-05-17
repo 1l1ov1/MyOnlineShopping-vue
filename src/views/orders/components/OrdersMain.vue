@@ -28,7 +28,6 @@ const init = (newValue) => {
 }
 // 申请退款
 const applyRefund = (id) => {
-  console.log(id)
   ElMessageBox.confirm(
     '确定要申请退款吗？',
     '申请退款',
@@ -49,10 +48,7 @@ const applyRefund = (id) => {
       }
     })
     .catch(() => {
-      ElMessage({
-        type: 'error',
-        message: '申请退款失败'
-      })
+
     })
 }
 // 用户催单
@@ -122,7 +118,7 @@ onMounted(() => {
             </td>
             <td colspan="2" class="bought-wrapper-mod__seller-container___3dAK3"><span
                 class="seller-mod__container___zFAFV"><img
-                  :src="(item.store.logo !== null && item.store.logo !== undefined) ? require('@/assets/uploadStore/' + item.store.logo) : require('@/assets/试用商户.png')"
+                  :src="require('@/assets/uploadStore/' + item.store.logo)"
                   class="seller-mod__icon___2F6_V" /><a href="javascript:void(0)"
                   @click="() => router.push('/storeDetail/' + item.store.id)" class="seller-mod__name___2IlQm"
                   :title="item.store.storeName">{{ item.store.storeName
@@ -145,8 +141,7 @@ onMounted(() => {
                 class="ml-mod__container___2DOxT production-mod__production___123Ax suborder-mod__production___3WebF">
                 <div class="ml-mod__media___2sZrj" style="width:80px;">
                   <a href="javascript:void(0)" @click="() => router.push('/goodsDetail/' + item.goods.id)"
-                    class="production-mod__pic___G8alD" ><img :src="(item.goods.coverPic !== null && item.goods.coverPic !== undefined && item.goods.coverPic !== '') ?
-    require('@/assets/uploadGoods/' + item.goods.coverPic) : require('@/assets/默认商品图.png')"><span>
+                    class="production-mod__pic___G8alD" ><img :src="    require('@/assets/uploadGoods/' + item.goods.coverPic) "><span>
                     </span></a>
                 </div>
                 <div style="margin-left:90px;">
@@ -213,7 +208,7 @@ onMounted(() => {
               <div>
                 <p style="margin-bottom:3px;"><span class="text-mod__link___1rXmw">{{ ordersConstant.getOrdersStatusLabel(item.status) }}</span>
                 </p>
-                <p style="margin-bottom:3px; margin-top: 20px;"><span class="text-mod__link___1rXmw"  :title="催单"><el-link
+                <p style="margin-bottom:3px; margin-top: 20px;"><span v-if="item.status === ordersConstant.ordersStatus.UNSHIPPED_ORDER.value" class="text-mod__link___1rXmw" :title="催单"><el-link
                   href="javascript:void(0)" style="font-size: 1.1em;" :disabled="reminder.isClicked[item.id]"
                   @click="handleReminder(item.id, item.store.id,item.ordersNumber)">催 单</el-link></span>
                 </p>
@@ -232,20 +227,21 @@ onMounted(() => {
             <td class="">
               <div>
                 <p style="margin-bottom:3px;"><a href="javascript:void(0)"
-                    class="text-mod__link___1rXmw text-mod__hover___1TDrR" >追加评论</a>
+                    class="text-mod__link___1rXmw text-mod__hover___1TDrR" @click="() => router.push('/goodsDetail/' + item.goods.id)">去追加评论</a>
                 </p>
                 <p style="margin-bottom:3px;"><a href="javascript:void(0)"
                     class="text-mod__link___1rXmw text-mod__hover___1TDrR"  action="b4"
                     id="applyInvoice">申请开票</a>
                 </p>
                 <!-- 如果是待发货订单，就允许申请退款或已签收订单7天内允许申请退款 -->
-                <p style="margin-bottom:3px;" v-if="item.status === 1 || (item.status === 4
+                <p style="margin-bottom:3px;" v-if="item.status === ordersConstant.ordersStatus.UNSHIPPED_ORDER.value
+                 || (item.status === ordersConstant.ordersStatus.USER_RECEIVE_PRODUCT.value
                 && Date.now() - item.createTime < 7 * 24 * 60 * 60 * 1000)">
                   <a href="javascript:void(0)" @click="applyRefund(item.id)"
                     class="text-mod__link___1rXmw text-mod__hover___1TDrR"  action="b4"
                     id="applyRefund">申请退款</a>
                 </p>
-                <p style="margin-bottom:3px;" v-if="item.status === 5">
+                <p style="margin-bottom:3px;" v-if="item.status === ordersConstant.ordersStatus.SUCCESSFUL_ORDER.value">
                   <a href="javascript:void(0)"
                     class="text-mod__link___1rXmw text-mod__hover___1TDrR"  action="b4"
                     id="applyRefund">交易完成</a>

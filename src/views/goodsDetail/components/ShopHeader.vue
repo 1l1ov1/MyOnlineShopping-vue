@@ -6,7 +6,8 @@ import { addFavoriteService, queryFavoriteIsExistService, batchDeleteFavoriteSer
 import { ElMessage } from 'element-plus'
 import { userStore } from '@/store/index'
 const props = defineProps({
-  store: Object
+  store: Object,
+  star: Number
 })
 
 const userStoreInstance = userStore()
@@ -27,6 +28,14 @@ watch(
   },
   {
     deep: true
+  }
+)
+// 监听评论分数
+const star = ref('暂无评分')
+watch(
+  () => props.star,
+  (newValue) => {
+    star.value = newValue.toFixed(1)
   }
 )
 const goToStore = () => {
@@ -94,7 +103,7 @@ const findFavorite = async () => {
                             <div class="shopHeader--evaluate">
                                 <div class="shopHeader--key">宝贝描述</div>
                                 <div class="shopHeader--scoreText">
-                                    4.8
+                                    {{ star }}
                                 </div>
                             </div>
                             <div class="shopHeader--evaluate">

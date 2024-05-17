@@ -455,8 +455,7 @@ const handleExport = async () => {
     a.download = '运营数据统计报表.xlsx'
     a.click()
     window.URL.revokeObjectURL(url)
-  }).catch((error) => {
-    console.log('error： ', error)
+  }).catch(() => {
   })
 }
 

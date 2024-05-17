@@ -111,8 +111,7 @@ onMounted(() => {
                                 <div class="PicGallery--root">
                                     <div class="PicGallery--mainPicWrap" style="position: relative;">
                                         <img class="PicGallery--mainPic"
-                                        :src="(goods.coverPic !== null && goods.coverPic !== undefined && goods.coverPic !== '')
-                                        ? require('@/assets/uploadGoods/' + goods.coverPic) : require('@/assets/默认商品图.png')"
+                                        :src="require('@/assets/uploadGoods/' + goods.coverPic)"
                                         style="padding-top: 0px; width: 338px; height: 450px;">
                                     </div>
                                 </div>

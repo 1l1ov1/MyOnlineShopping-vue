@@ -32,6 +32,8 @@ const batchDeleteCart = () => {
       }
     ).then(() => {
       emit('batchDeleteCart', true)
+      // 取消全选
+      checkAll.value = false
     })
       .catch(() => {
 

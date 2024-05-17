@@ -74,7 +74,6 @@ const open = async (row) => {
     const res = await getApplyDetailService(row.id)
     defaultAddress.value = res.data.address
     formModel.value = res.data
-    console.log(formModel.value)
   } else {
     // 需要重置数据
     formModel.value = { ...defaultData } // 基于默认的数据，重置form数据

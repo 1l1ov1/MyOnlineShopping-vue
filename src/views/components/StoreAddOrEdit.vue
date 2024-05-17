@@ -61,12 +61,16 @@ const onSubmit = async () => {
   await formRef.value.validate()
   const isEdit = formModel.value.id
   if (isEdit) {
-    await UpdateStoreService(formModel.value)
-    ElMessage.success('编辑成功')
+    const res = await UpdateStoreService(formModel.value)
+    if (res.code === 1) {
+      ElMessage.success('编辑成功')
+    }
   } else {
     // 添加商店
-    await AddStoreService(formModel.value)
-    ElMessage.success('添加成功')
+    const res = await AddStoreService(formModel.value)
+    if (res.code === 1) {
+      ElMessage.success('添加成功')
+    }
   }
   // 关闭对话框
   dialogFormVisible.value = false
@@ -94,7 +98,6 @@ const handleAvatarSuccess = (res, file) => {
 
 // 图片上传前先检查
 const beforeAvatarUpload = (UploadRawFile) => {
-  console.log(UploadRawFile.type)
   const type = UploadRawFile.type === 'image/jpeg' ||
     UploadRawFile.type === 'image/png' ||
     UploadRawFile.type === 'image/jpg'

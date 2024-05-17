@@ -16,7 +16,6 @@ const tabName = ref('禁言')
 const isManagerForbidden = ref(false)
 const userId = ref()
 const open = async (row, type) => {
-  console.log(row)
   if (type === '举报') {
     dialogVisible.value = true
     row.children.forEach(report => {

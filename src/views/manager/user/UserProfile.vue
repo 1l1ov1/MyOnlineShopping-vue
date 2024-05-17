@@ -58,7 +58,6 @@ const handleAvatarSuccess = (res, file) => {
 
 // 图片上传前先检查
 const beforeAvatarUpload = (UploadRawFile) => {
-  console.log(UploadRawFile.type)
   const type = UploadRawFile.type === 'image/jpeg' ||
     UploadRawFile.type === 'image/png' ||
     UploadRawFile.type === 'image/jpg'
@@ -80,7 +79,6 @@ const selectedOptions = ref([])
 // val 选中的值
 // 索引下标
 const handleChange = (val, index) => {
-  console.log(val)
   formModel.value.addressList[index].provinceCode = val[0]
   formModel.value.addressList[index].provinceName = codeToText[val[0]]
 

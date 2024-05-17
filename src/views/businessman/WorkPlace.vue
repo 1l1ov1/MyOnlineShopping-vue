@@ -15,7 +15,7 @@ import { userStore } from '@/store/index.js'
 import { onMounted, ref } from 'vue'
 import { userLogoutService } from '@/api/user.js'
 import { useRouter } from 'vue-router'
-import { BASE_URL } from '@/constant/baseUrl.js'
+// import { BASE_URL } from '@/constant/baseUrl.js'
 import { websocketTypeConstant } from '@/constant/constants.js'
 const userStoreInstance = userStore()
 const router = useRouter()
@@ -62,9 +62,13 @@ const onChange = (number) => {
 // 启用蒙层时，target 元素区域是否可以点击。
 const enableClick = ref(false)
 const open = ref(true)
+const hasInteracted = ref(false)
+document.addEventListener('click', (e) => {
+  hasInteracted.value = true
+})
 // 当商家进入后台，就开始进行socket连接
 const Websocket = () => {
-  const wsUrl = `ws://${BASE_URL}/api/ws/store/` + userStoreInstance.user.store.id
+  const wsUrl = `ws://${process.env.VUE_APP_API_URL}/ws/store/` + userStoreInstance.user.store.id
   let socket
 
   // 如果浏览器支持，创建 WebSocket 连接
@@ -94,10 +98,29 @@ const Websocket = () => {
     const jsonMsg = JSON.parse(msg.data)
     // 如果是下订单消息
     if (jsonMsg.type === 1) {
-      audioVo2.value.play()
+      // 如果是用户下订单
+      if (hasInteracted.value) {
+        audioVo2.value.play()
+      } else {
+        // 如果用户还没有交互，就先缓存
+        setTimeout(() => {
+          if (hasInteracted.value) {
+            audioVo2.value.play()
+          }
+        }, 0)
+      }
     } else if (jsonMsg.type === 2) {
       // 如果是用户催单
-      audioVo.value.play()
+      if (hasInteracted.value) {
+        audioVo.value.play()
+      } else {
+        // 如果用户还没有交互，就先缓存
+        setTimeout(() => {
+          if (hasInteracted.value) {
+            audioVo.value.play()
+          }
+        }, 0)
+      }
     }
     // 显示数据
     ElNotification.success({
@@ -144,11 +167,11 @@ onMounted(() => {
    -->
    <audio ref="audioVo"
                hidden>
-          <source src="@/assets/用户催单提示音.mp3" type="audio/mp3" />
+          <source src="@/assets/用户催单提示音.mp3" muted="muted" type="audio/mp3" />
         </audio>
         <audio ref="audioVo2"
                hidden>
-          <source src="@/assets/新订单提示音.mp3" type="audio/mp3" />
+          <source src="@/assets/新订单提示音.mp3" muted="muted" type="audio/mp3" />
     </audio>
     <el-container class="layout-container">
         <el-aside width="200px">

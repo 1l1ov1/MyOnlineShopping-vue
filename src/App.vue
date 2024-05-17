@@ -2,7 +2,7 @@
 import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
 import { userStore } from '@/store/index.js'
 import { ElNotification } from 'element-plus'
-import { BASE_URL } from '@/constant/baseUrl.js'
+// import { BASE_URL } from '@/constant/baseUrl.js'
 import { websocketTypeConstant } from '@/constant/constants.js'
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -16,9 +16,9 @@ const Websocket = (stopInterval) => {
   }
   // 如果登录了，就停止定时器
   stopInterval(websocketIntervalId.value)
-  const wsUrl = `ws://${BASE_URL}/api/ws/user/` + userStoreInstance.user.id
+  // const wsUrl = `ws://${BASE_URL}/ws/user/` + userStoreInstance.user.id
+  const wsUrl = `ws://${process.env.VUE_APP_API_URL}/ws/user/` + userStoreInstance.user.id
   let socket
-
   // 如果浏览器支持，创建 WebSocket 连接
   if ('WebSocket' in window) {
     socket = new WebSocket(wsUrl)
@@ -36,6 +36,8 @@ const Websocket = (stopInterval) => {
   function handleOpen (event) {
     console.log('WebSocket 连接已建立。')
     // 可在此处发送初始消息或执行任何设置任务
+    // 然后去获取用户的信息
+    userStoreInstance.getUser()
   }
 
   // 从服务器接收到消息

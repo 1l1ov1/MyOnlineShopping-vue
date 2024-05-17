@@ -6,6 +6,7 @@ import { getAllGoodsService, queryGoodsService } from '@/api/goods'
 import router from '@/router'
 import { getCategoryListService } from '@/api/category'
 import { queryStoresService } from '@/api/store'
+import { ElMessage } from 'element-plus'
 // import { userLogoutService } from '@/api/user'
 // 创建路由
 
@@ -43,6 +44,14 @@ const searchContent = ref('')
 const inputValue = ref()
 // 处理搜索框
 const handleSearchContent = () => {
+  if (searchContent.value === '' || searchContent.value.trim() === '') {
+    ElMessage({
+      message: '输入的内容不能为空，或者全为空格',
+      grouping: true,
+      type: 'warning'
+    })
+    return
+  }
   if (selectChoice.value === '宝贝') {
     router.push({
       path: '/searchGoods', // 导航到搜索界面
@@ -199,8 +208,7 @@ onMounted(async () => {
                             <a class="item-link" style="text-decoration: none;" target="_blank"
                                 @click="() => router.push('/goodsDetail/' + item.id)">
                                 <div class="img-wrapper">
-                                    <el-image lazy :src="(item.coverPic !== null && item.coverPic != undefined && item.coverPic != '') ?
-                                    require('@/assets/uploadGoods/' + item.coverPic) : require('@/assets/默认商品图.png')" />
+                                    <el-image lazy :src=" require('@/assets/uploadGoods/' + item.coverPic)" />
                                 </div>
                                 <div class="info-wrapper">
                                     <div class="title">{{ item.goodsName }}</div>
