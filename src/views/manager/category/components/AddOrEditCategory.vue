@@ -67,7 +67,7 @@ defineExpose({
 </script>
 
 <template>
-     <el-dialog v-model="dialogFormVisible" :title="formModel.id === undefined ? '编辑分类' : '添加分类'" width="25%">
+     <el-dialog v-model="dialogFormVisible" :title="formModel.id !== undefined ? '编辑分类' : '添加分类'" width="25%">
     <el-form ref="formRef" :model="formModel" :rules="rules">
       <el-form-item label="分类名称" prop="categoryName">
         <el-input v-model="formModel.categoryName" autocomplete="off" />

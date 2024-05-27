@@ -652,6 +652,10 @@ const WEBSOCKET_TYPE = {
   USER_AWARD: {
     value: 5,
     label: '用户奖励'
+  },
+  USER_CHAT: {
+    value: 6,
+    label: '用户聊天'
   }
 }
 

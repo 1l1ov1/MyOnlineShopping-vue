@@ -119,14 +119,17 @@ const openRecharge = () => {
         @click="goToBack">工作区</el-link></el-menu-item>
     <el-menu-item index="5" v-if="userStoreInstance.user.status === userConstant.userStatus.COMMON_USER.value"><el-link
         @click="() => router.push('/createStore')">成为店家</el-link></el-menu-item>
-    <el-sub-menu index="6">
+    <el-menu-item index="6" v-if="userStoreInstance.user.status ===userConstant.userStatus.BUSINESSMAN.value">
+      <el-link @click="() => router.push('/chatRoom/' + userStoreInstance.user.store.id)">私信</el-link>
+    </el-menu-item>
+        <el-sub-menu index="7">
 
       <template #title>操作</template>
-      <el-menu-item index="6-1"><el-link style="width: 100%; font-size: 1.2em; text-align: center"
+      <el-menu-item index="7-1"><el-link style="width: 100%; font-size: 1.2em; text-align: center"
           @click="() => router.push('/myCart')">我的购物车</el-link></el-menu-item>
-      <el-menu-item index="6-2"><el-link style="width: 100%; font-size: 1.2em; text-align: center"
+      <el-menu-item index="7-2"><el-link style="width: 100%; font-size: 1.2em; text-align: center"
           @click="() => router.push('/myFavorite')">我收藏的宝贝</el-link></el-menu-item>
-      <el-menu-item index="6-3">
+      <el-menu-item index="7-3">
         <template #title><el-link style="width: 100%; font-size: 1.2em; text-align: center"
             @click="() => router.push('/myOrders')">我的订单</el-link></template>
         <!-- <el-menu-item index="6-3-1"><el-link style="width: 100%; font-size: 1.2em; text-align: center"

@@ -241,7 +241,7 @@ const emit = defineEmits(['returnComments'])
               <div v-for="item in commentsList" :key="item.id">
                 <div class="comment-root">
                   <div class="comment-header">
-                    <div class="comment-avatar">
+                    <div class="comment-avatar" v-if="item.avatar !== undefined">
                       <img :src="require('@/assets/uploadAvatar/' + item.avatar)" />
                     </div>
                     <div class="comment-userInfo">

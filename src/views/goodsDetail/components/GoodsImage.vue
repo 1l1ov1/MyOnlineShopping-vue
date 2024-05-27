@@ -2,10 +2,11 @@
 defineProps({
   coverPic: String
 })
+
 </script>
 
 <template>
-  <div class="BasicContent--mainPic">
+  <div class="BasicContent--mainPic" v-if="coverPic !== undefined">
             <div class="PicGallery--root">
                 <div class="PicGallery--mainPicWrap" style="position: relative;">
                     <img class="PicGallery--mainPic"

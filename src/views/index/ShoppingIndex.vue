@@ -175,7 +175,7 @@ onMounted(async () => {
                     <div class="category-list-wrapper">
                         <ul class="category-list">
                             <li class="category" v-for="item in categoryList" :key="item.id">
-                                <a href="javascript:void(0)" target="_blank" @click="jumpToCategoryDetail(item.id)">
+                                <a  v-if="item.categoryStatus !== 0" href="javascript:void(0)" target="_blank" @click="jumpToCategoryDetail(item.id)">
                                     {{ item.categoryName }}
                                 </a>
                             </li>
