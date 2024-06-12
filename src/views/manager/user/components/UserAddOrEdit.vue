@@ -176,7 +176,7 @@ defineExpose({
 
 <template>
 
-  <el-dialog v-model="dialogFormVisible" :title="formModel.id === undefined ? '编辑用户' : '添加用户'" width="25%">
+  <el-dialog v-model="dialogFormVisible" :title="formModel.id !== undefined && formModel.id !== null ? '编辑用户' : '添加用户'" width="25%">
     <el-form ref="formRef" :model="formModel" :rules="rules">
       <el-form-item label="用户名" prop="username">
         <el-input v-model="formModel.username" autocomplete="off" :disabled="formModel.id" />
