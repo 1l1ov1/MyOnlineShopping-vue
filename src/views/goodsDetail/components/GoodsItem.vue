@@ -9,6 +9,7 @@ import { addCartService } from '@/api/cart'
 import { buyGoodsService } from '@/api/user'
 import { addFavoriteService, queryFavoriteIsExistService, batchDeleteFavoriteService } from '@/api/favorite'
 import { ElMessage } from 'element-plus'
+import { checkFiledIsNotNull } from '@/utils/FiledUtils'
 const userStoreInstance = userStore()
 const user = ref({
   ...userStoreInstance.user
@@ -25,10 +26,12 @@ const onDialog = (val) => {
 }
 // 得到用户默认地址
 const getDefaultAddress = () => {
-  for (const address of user.value.addressList) {
-    if (address.isDefault === 1) {
-      selectedAddress.value = address
-      break
+  if (userStoreInstance.token !== undefined) {
+    for (const address of user.value.addressList) {
+      if (address.isDefault === 1) {
+        selectedAddress.value = address
+        break
+      }
     }
   }
 }
@@ -52,12 +55,14 @@ watch(
     params.value.goodsPrice = newValue.price
     params.value.discount = newValue.discount
 
-    const flag = await findFavorite()
-    // 如果没有收藏
-    if (flag) {
-      isFavorite.value = false
-    } else {
-      isFavorite.value = true
+    if (checkFiledIsNotNull(userStoreInstance.token)) {
+      const flag = await findFavorite()
+      // 如果没有收藏
+      if (flag) {
+        isFavorite.value = false
+      } else {
+        isFavorite.value = true
+      }
     }
   },
   {

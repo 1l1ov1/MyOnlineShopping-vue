@@ -35,7 +35,7 @@ export const OpenOrClose = (params) => {
 }
 // 回显商店的商品
 export const getStoreGoods = (id) =>
-  request.get(`/api/store/getGoods/${id}`)
+  request.get(`/api/store/getStore/${id}`)
 
 // 根据商店名查询商店
 export const queryStoresService = (storeName) =>

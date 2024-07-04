@@ -29,6 +29,7 @@ const getCategoryList = async () => {
   // 由于类别不会有很多，所以就这样简单的写死
   const res = await getCategoryListService({ page: 1, pageSize: 100 })
   categoryList.value = res.data.data
+  categoryList.value = categoryList.value.filter(category => category.categoryStatus !== 0)
 }
 // 点击分类跳到对应的分类详情
 const jumpToCategoryDetail = (id) => {
@@ -175,7 +176,7 @@ onMounted(async () => {
                     <div class="category-list-wrapper">
                         <ul class="category-list">
                             <li class="category" v-for="item in categoryList" :key="item.id">
-                                <a  v-if="item.categoryStatus !== 0" href="javascript:void(0)" target="_blank" @click="jumpToCategoryDetail(item.id)">
+                                <a  href="javascript:void(0)" target="_blank" @click="jumpToCategoryDetail(item.id)">
                                     {{ item.categoryName }}
                                 </a>
                             </li>
@@ -274,8 +275,12 @@ onMounted(async () => {
 }
 
 .category-list {
-    padding: 16px 0 8px 20px;
+    padding: 2px 0 8px 20px;
     border-top: none;
+}
+
+.category-list:last-child {
+    padding-bottom: 0px;
 }
 
 ol,

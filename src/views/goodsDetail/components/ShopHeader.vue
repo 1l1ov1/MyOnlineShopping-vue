@@ -5,6 +5,7 @@ import { Star, StarFilled } from '@element-plus/icons-vue'
 import { addFavoriteService, queryFavoriteIsExistService, batchDeleteFavoriteService } from '@/api/favorite'
 import { ElMessage } from 'element-plus'
 import { userStore } from '@/store/index'
+import { checkFiledIsNotNull } from '@/utils/FiledUtils'
 const props = defineProps({
   store: Object,
   star: Number
@@ -18,12 +19,14 @@ watch(
   () => props.store,
   async (newValue, oldValue) => {
     // 只要商店变化了，就去查找
-    const flag = await findFavorite()
-    // 如果没有收藏
-    if (flag) {
-      isFavorite.value = false
-    } else {
-      isFavorite.value = true
+    if (checkFiledIsNotNull(userStoreInstance.token)) {
+      const flag = await findFavorite()
+      // 如果没有收藏
+      if (flag) {
+        isFavorite.value = false
+      } else {
+        isFavorite.value = true
+      }
     }
   },
   {

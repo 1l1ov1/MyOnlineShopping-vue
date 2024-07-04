@@ -6,10 +6,14 @@ import { userLogoutService, userRechargeService } from '@/api/user'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { InfoFilled } from '@element-plus/icons-vue'
 import { userConstant } from '@/constant/constants'
+import { checkFiledIsNotNull } from '@/utils/FiledUtils'
 const userStoreInstance = userStore()
 const router = useRouter()
 onMounted(() => {
-  userStoreInstance.getUser()
+  if (checkFiledIsNotNull(userStoreInstance.token)) {
+    // 如果用户登录过，就去获取用户的信息
+    userStoreInstance.getUser()
+  }
 })
 
 const props = defineProps({
@@ -115,7 +119,7 @@ const openRecharge = () => {
     <el-menu-item index="1"><el-link @click="() => router.push('/')">首页</el-link></el-menu-item>
     <el-menu-item index="2"><el-link @click="() => router.push('/login')">登录</el-link></el-menu-item>
     <el-menu-item index="3"><el-link @click="() => router.push('/register')">注册</el-link></el-menu-item>
-    <el-menu-item index="4" v-if="userStoreInstance.user.status !== userConstant.userStatus.COMMON_USER.value"><el-link
+    <el-menu-item index="4" v-if="checkFiledIsNotNull(userStoreInstance.token) && userStoreInstance.user.status !== userConstant.userStatus.COMMON_USER.value"><el-link
         @click="goToBack">工作区</el-link></el-menu-item>
     <el-menu-item index="5" v-if="userStoreInstance.user.status === userConstant.userStatus.COMMON_USER.value"><el-link
         @click="() => router.push('/createStore')">成为店家</el-link></el-menu-item>

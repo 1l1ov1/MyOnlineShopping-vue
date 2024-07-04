@@ -245,13 +245,33 @@ const router = createRouter({
 //    '/login'   { name: 'login' }
 // 白名单
 const whiteList = ['/login', '/register', '/forgetPassword']
-router.beforeEach((to) => {
+router.beforeEach((to, from) => {
   // 如果没有token, 那么就只能访问登录、注册和忘记密码页面，其他的一律不允许访问
   const userStoreInstance = userStore()
-
   if (!userStoreInstance.token) {
-    // 如果说用户在没有登录的情况下点击了去往首页的话，就要给予一个提示，然后拦截
-    if (to.path === '/') {
+    // 如果说来自登录页要去首页
+    if ((to.path === '/') ||
+    (to.path.startsWith('/goodsDetail/') && to.params.id) ||
+    (to.path === '/searchGoods') ||
+    (to.path === '/searchStores') ||
+    (to.path.startsWith('/storeDetail/') && to.params.id) ||
+    (to.path.startsWith('/categoryDetail/') && to.params.id)
+    ) {
+      // 允许
+    } else if (!whiteList.includes(to.path)) {
+      ElMessage({
+        message: '<strong>请先登录，登陆后才能前往目标页哦(●\'◡\'●)</strong>',
+        type: 'warning',
+        grouping: true,
+        dangerouslyUseHTMLString: true
+      })
+      // 如果不在白名单内就直接跳去登录
+      return '/login'
+    }
+  }
+})
+/*  else if (to.path === '/') {
+      // 如果说用户在没有登录的情况下点击了去往首页的话，就要给予一个提示，然后拦截
       ElMessage({
         message: '<strong>请先登录，登陆后才能前往主页</strong>',
         type: 'warning',
@@ -259,12 +279,5 @@ router.beforeEach((to) => {
         dangerouslyUseHTMLString: true
       })
       // 拦截
-      return '/login'
-    } else if (!whiteList.includes(to.path)) {
-      // 如果在白名单内就直接跳去登录
-      return '/login'
-    }
-  }
-})
-
+      return '/login' */
 export default router

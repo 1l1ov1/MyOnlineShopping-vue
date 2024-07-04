@@ -74,6 +74,7 @@ instance.interceptors.response.use(
       await userLogoutService()
     } else {
       // 错误的默认情况
+      console.log(err)
       ElMessage.error(err.response.data.msg || err.response.data.error)
       return Promise.reject(err)
     }
