@@ -26,7 +26,7 @@ const onDialog = (val) => {
 }
 // 得到用户默认地址
 const getDefaultAddress = () => {
-  if (userStoreInstance.token !== undefined) {
+  if (userStoreInstance.token !== undefined && userStoreInstance.token !== '') {
     for (const address of user.value.addressList) {
       if (address.isDefault === 1) {
         selectedAddress.value = address
